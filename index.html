@@ -1,15 +1,16 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl" class="h-full">
- <head>
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NOUR NADY - منصة الكورسات</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="/_sdk/element_sdk.js"></script>
   <script src="/_sdk/data_sdk.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body { box-sizing: border-box; }
+    html { height: 100%; }
+    body { box-sizing: border-box; height: 100%; overflow: auto; }
     * { font-family: 'Cairo', sans-serif; }
     .gradient-bg { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
     .card-glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
@@ -25,1287 +26,486 @@
     .course-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(233,69,96,0.3); }
     .course-card { transition: all 0.3s ease; }
   </style>
-  <style>@view-transition { navigation: auto; }</style>
- </head>
- <body class="h-full gradient-bg text-white overflow-auto">
-  <div id="app" class="h-full w-full"><!-- Toast Container -->
-   <div id="toast-container" class="fixed top-4 left-4 z-50 flex flex-col gap-2"></div><!-- Loading Overlay -->
-   <div id="loading-overlay" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-    <div class="text-center">
-     <div class="w-16 h-16 border-4 border-e94560 border-t-transparent rounded-full animate-spin mx-auto"></div>
-     <p class="mt-4 text-lg">جاري التحميل...</p>
+</head>
+<body class="h-full w-full gradient-bg text-white">
+  <div id="app" class="h-full w-full overflow-auto">
+    
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-4 left-4 z-50 flex flex-col gap-2"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+      <div class="text-center">
+        <div class="w-16 h-16 border-4 border-e94560 border-t-transparent rounded-full animate-spin mx-auto"></div>
+        <p class="mt-4 text-lg">جاري التحميل...</p>
+      </div>
     </div>
-   </div><!-- Main Student Page -->
-   <div id="page-main" class="min-h-full"><!-- Header -->
-    <header class="bg-black/30 py-4 px-6 flex justify-between items-center sticky top-0 z-40">
-     <div class="flex items-center gap-3">
-      <div class="w-12 h-12 rounded-full btn-primary flex items-center justify-center text-2xl font-bold">
-       N
-      </div>
-      <div>
-       <h1 id="header-title" class="text-2xl font-bold">NOUR NADY</h1>
-       <p class="text-xs text-gray-400">منصة تعليمية متكاملة</p>
-      </div>
-     </div>
-     <div class="flex gap-3"><button onclick="showPage('login')" class="px-4 py-2 rounded-lg card-glass hover:bg-white/10 transition">تسجيل الدخول</button> <button onclick="showPage('register')" class="px-4 py-2 rounded-lg btn-primary transition">إنشاء حساب</button> <button onclick="showPage('admin-login')" class="px-3 py-2 rounded-lg text-gray-400 hover:text-white transition text-sm">
-       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-       </svg></button>
-     </div>
-    </header><!-- Hero Section -->
-    <section class="py-20 px-6 text-center">
-     <h2 id="welcome-text" class="text-4xl md:text-6xl font-bold mb-6">مرحباً بك في منصة<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-red-500">نور نادي</span> التعليمية</h2>
-     <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">منصة تعليمية متكاملة للمرحلة الإعدادية والثانوية - كورسات احترافية وامتحانات تفاعلية</p><button onclick="showPage('register')" class="px-8 py-4 rounded-xl btn-primary text-xl font-bold hover:scale-105 transition transform">ابدأ رحلة التعلم الآن 🚀</button>
-    </section><!-- Grades Section -->
-    <section class="py-12 px-6">
-     <h3 class="text-3xl font-bold text-center mb-10">اختر صفك الدراسي</h3>
-     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-6xl mx-auto">
-      <div class="card-glass rounded-xl p-6 text-center cursor-pointer hover:bg-white/10 transition" onclick="showPage('register')">
-       <div class="text-4xl mb-3">
-        📚
-       </div>
-       <p class="font-bold">أولى إعدادي</p>
-      </div>
-      <div class="card-glass rounded-xl p-6 text-center cursor-pointer hover:bg-white/10 transition" onclick="showPage('register')">
-       <div class="text-4xl mb-3">
-        📖
-       </div>
-       <p class="font-bold">تانية إعدادي</p>
-      </div>
-      <div class="card-glass rounded-xl p-6 text-center cursor-pointer hover:bg-white/10 transition" onclick="showPage('register')">
-       <div class="text-4xl mb-3">
-        📝
-       </div>
-       <p class="font-bold">تالتة إعدادي</p>
-      </div>
-      <div class="card-glass rounded-xl p-6 text-center cursor-pointer hover:bg-white/10 transition" onclick="showPage('register')">
-       <div class="text-4xl mb-3">
-        🎓
-       </div>
-       <p class="font-bold">أولى ثانوي</p>
-      </div>
-      <div class="card-glass rounded-xl p-6 text-center cursor-pointer hover:bg-white/10 transition" onclick="showPage('register')">
-       <div class="text-4xl mb-3">
-        🏆
-       </div>
-       <p class="font-bold">تانية ثانوي</p>
-      </div>
-      <div class="card-glass rounded-xl p-6 text-center cursor-pointer hover:bg-white/10 transition" onclick="showPage('register')">
-       <div class="text-4xl mb-3">
-        ⭐
-       </div>
-       <p class="font-bold">تالتة ثانوي</p>
-      </div>
-     </div>
-    </section><!-- Footer -->
-    <footer class="py-8 px-6 bg-black/30 text-center mt-20">
-     <p class="text-gray-400">© 2024 NOUR NADY - جميع الحقوق محفوظة</p>
-    </footer>
-   </div><!-- Student Login Page -->
-   <div id="page-login" class="hidden min-h-full flex items-center justify-center p-6">
-    <div class="card-glass rounded-2xl p-8 w-full max-w-md"><button onclick="showPage('main')" class="text-gray-400 hover:text-white mb-4">→ رجوع</button>
-     <h2 class="text-3xl font-bold text-center mb-8">تسجيل الدخول</h2>
-     <form id="login-form" onsubmit="handleStudentLogin(event)">
-      <div class="mb-4"><label class="block mb-2 text-gray-300">رقم الموبايل</label> <input type="tel" id="login-phone" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="01xxxxxxxxx">
-      </div>
-      <div class="mb-6"><label class="block mb-2 text-gray-300">كلمة السر</label> <input type="password" id="login-password" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="••••••••">
-      </div><button type="submit" class="w-full py-4 rounded-xl btn-primary font-bold text-lg">دخول</button>
-     </form>
-     <p class="text-center mt-4 text-gray-400">ليس لديك حساب؟ <button onclick="showPage('register')" class="text-pink-500 hover:underline">سجل الآن</button></p>
+
+    <!-- Main Student Page -->
+    <div id="page-main" class="min-h-full">
+      <!-- Header -->
+      <header class="bg-black/30 py-4 px-6 flex justify-between items-center sticky top-0 z-40">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-full btn-primary flex items-center justify-center text-2xl font-bold">N</div>
+          <div>
+            <h1 id="header-title" class="text-2xl font-bold">NOUR NADY</h1>
+            <p class="text-xs text-gray-400">منصة تعليمية متكاملة</p>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <button onclick="showPage('login')" class="px-4 py-2 rounded-lg card-glass hover:bg-white/10 transition">تسجيل الدخول</button>
+          <button onclick="showPage('register')" class="px-4 py-2 rounded-lg btn-primary transition">إنشاء حساب</button>
+          <button onclick="showPage('admin-login')" class="px-3 py-2 rounded-lg text-gray-400 hover:text-white transition text-sm">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Hero Section -->
+      <section class="py-20 px-6 text-center">
+        <h2 id="welcome-text" class="text-4xl md:text-6xl font-bold mb-6">مرحباً بك في منصة<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-red-500">نور نادي</span> التعليمية</h2>
+        <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">منصة تعليمية متكاملة للمرحلة الإعدادية والثانوية - كورسات احترافية وامتحانات تفاعلية</p>
+        <button onclick="showPage('register')" class="px-8 py-4 rounded-xl btn-primary text-xl font-bold hover:scale-105 transition transform">ابدأ رحلة التعلم الآن 🚀</button>
+      </section>
+
+      <!-- Grades Section -->
+      <section class="py-12 px-6">
+        <h3 class="text-3xl font-bold text-center mb-10">اختر صفك الدراسي</h3>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-6xl mx-auto">
+          <div class="card-glass rounded-xl p-6 text-center cursor-pointer hover:bg-white/10 transition" onclick="showPage('register')">
+            <div class="text-4xl mb-3">📚</div>
+            <p class="font-bold">أولى إعدادي</p>
+          </div>
+          <div class="card-glass rounded-xl p-6 text-center cursor-pointer hover:bg-white/10 transition" onclick="showPage('register')">
+            <div class="text-4xl mb-3">📖</div>
+            <p class="font-bold">تانية إعدادي</p>
+          </div>
+          <div class="card-glass rounded-xl p-6 text-center cursor-pointer hover:bg-white/10 transition" onclick="showPage('register')">
+            <div class="text-4xl mb-3">📝</div>
+            <p class="font-bold">تالتة إعدادي</p>
+          </div>
+          <div class="card-glass rounded-xl p-6 text-center cursor-pointer hover:bg-white/10 transition" onclick="showPage('register')">
+            <div class="text-4xl mb-3">🎓</div>
+            <p class="font-bold">أولى ثانوي</p>
+          </div>
+          <div class="card-glass rounded-xl p-6 text-center cursor-pointer hover:bg-white/10 transition" onclick="showPage('register')">
+            <div class="text-4xl mb-3">🏆</div>
+            <p class="font-bold">تانية ثانوي</p>
+          </div>
+          <div class="card-glass rounded-xl p-6 text-center cursor-pointer hover:bg-white/10 transition" onclick="showPage('register')">
+            <div class="text-4xl mb-3">⭐</div>
+            <p class="font-bold">تالتة ثانوي</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="py-8 px-6 bg-black/30 text-center mt-20">
+        <p class="text-gray-400">© 2024 NOUR NADY - جميع الحقوق محفوظة</p>
+      </footer>
     </div>
-   </div><!-- Student Register Page -->
-   <div id="page-register" class="hidden min-h-full flex items-center justify-center p-6">
-    <div class="card-glass rounded-2xl p-8 w-full max-w-md"><button onclick="showPage('main')" class="text-gray-400 hover:text-white mb-4">→ رجوع</button>
-     <h2 class="text-3xl font-bold text-center mb-8">إنشاء حساب جديد</h2>
-     <form id="register-form" onsubmit="handleStudentRegister(event)">
-      <div class="mb-4"><label class="block mb-2 text-gray-300">الاسم بالكامل</label> <input type="text" id="reg-name" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="محمد أحمد">
+
+    <!-- Student Login Page -->
+    <div id="page-login" class="hidden min-h-full flex items-center justify-center p-6">
+      <div class="card-glass rounded-2xl p-8 w-full max-w-md">
+        <button onclick="showPage('main')" class="text-gray-400 hover:text-white mb-4">→ رجوع</button>
+        <h2 class="text-3xl font-bold text-center mb-8">تسجيل الدخول</h2>
+        <form id="login-form" onsubmit="handleStudentLogin(event)">
+          <div class="mb-4">
+            <label class="block mb-2 text-gray-300">رقم الموبايل</label>
+            <input type="tel" id="login-phone" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="01xxxxxxxxx">
+          </div>
+          <div class="mb-6">
+            <label class="block mb-2 text-gray-300">كلمة السر</label>
+            <input type="password" id="login-password" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="••••••••">
+          </div>
+          <button type="submit" class="w-full py-4 rounded-xl btn-primary font-bold text-lg">دخول</button>
+        </form>
+        <p class="text-center mt-4 text-gray-400">ليس لديك حساب؟ <button onclick="showPage('register')" class="text-pink-500 hover:underline">سجل الآن</button></p>
       </div>
-      <div class="mb-4"><label class="block mb-2 text-gray-300">رقم الموبايل</label> <input type="tel" id="reg-phone" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="01xxxxxxxxx">
-      </div>
-      <div class="mb-4"><label class="block mb-2 text-gray-300">كلمة السر</label> <input type="password" id="reg-password" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="••••••••">
-      </div>
-      <div class="mb-6"><label class="block mb-2 text-gray-300">الصف الدراسي</label> <select id="reg-grade" required class="w-full px-4 py-3 rounded-lg input-style text-white bg-transparent"> <option value="" class="bg-gray-800">اختر صفك</option> <option value="prep1" class="bg-gray-800">أولى إعدادي</option> <option value="prep2" class="bg-gray-800">تانية إعدادي</option> <option value="prep3" class="bg-gray-800">تالتة إعدادي</option> <option value="sec1" class="bg-gray-800">أولى ثانوي</option> <option value="sec2" class="bg-gray-800">تانية ثانوي</option> <option value="sec3" class="bg-gray-800">تالتة ثانوي</option> </select>
-      </div><button type="submit" class="w-full py-4 rounded-xl btn-primary font-bold text-lg">إنشاء الحساب</button>
-     </form>
-     <p class="text-center mt-4 text-gray-400">لديك حساب؟ <button onclick="showPage('login')" class="text-pink-500 hover:underline">سجل دخول</button></p>
     </div>
-   </div><!-- Pending Approval Page -->
-   <div id="page-pending" class="hidden min-h-full flex items-center justify-center p-6">
-    <div class="card-glass rounded-2xl p-8 w-full max-w-md text-center">
-     <div class="text-6xl mb-6">
-      ⏳
-     </div>
-     <h2 class="text-3xl font-bold mb-4">في انتظار الموافقة</h2>
-     <p class="text-gray-300 mb-6">تم إرسال طلب التسجيل للمشرف. سيتم إعلامك عند الموافقة على حسابك.</p><button onclick="showPage('main')" class="px-6 py-3 rounded-xl btn-primary font-bold">العودة للرئيسية</button>
+
+    <!-- Student Register Page -->
+    <div id="page-register" class="hidden min-h-full flex items-center justify-center p-6">
+      <div class="card-glass rounded-2xl p-8 w-full max-w-md">
+        <button onclick="showPage('main')" class="text-gray-400 hover:text-white mb-4">→ رجوع</button>
+        <h2 class="text-3xl font-bold text-center mb-8">إنشاء حساب جديد</h2>
+        <form id="register-form" onsubmit="handleStudentRegister(event)">
+          <div class="mb-4">
+            <label class="block mb-2 text-gray-300">الاسم بالكامل</label>
+            <input type="text" id="reg-name" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="محمد أحمد">
+          </div>
+          <div class="mb-4">
+            <label class="block mb-2 text-gray-300">رقم الموبايل</label>
+            <input type="tel" id="reg-phone" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="01xxxxxxxxx">
+          </div>
+          <div class="mb-4">
+            <label class="block mb-2 text-gray-300">كلمة السر</label>
+            <input type="password" id="reg-password" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="••••••••">
+          </div>
+          <div class="mb-6">
+            <label class="block mb-2 text-gray-300">الصف الدراسي</label>
+            <select id="reg-grade" required class="w-full px-4 py-3 rounded-lg input-style text-white bg-transparent">
+              <option value="" class="bg-gray-800">اختر صفك</option>
+              <option value="prep1" class="bg-gray-800">أولى إعدادي</option>
+              <option value="prep2" class="bg-gray-800">تانية إعدادي</option>
+              <option value="prep3" class="bg-gray-800">تالتة إعدادي</option>
+              <option value="sec1" class="bg-gray-800">أولى ثانوي</option>
+              <option value="sec2" class="bg-gray-800">تانية ثانوي</option>
+              <option value="sec3" class="bg-gray-800">تالتة ثانوي</option>
+            </select>
+          </div>
+          <button type="submit" id="register-btn" class="w-full py-4 rounded-xl btn-primary font-bold text-lg">إنشاء الحساب</button>
+        </form>
+        <p class="text-center mt-4 text-gray-400">لديك حساب؟ <button onclick="showPage('login')" class="text-pink-500 hover:underline">سجل دخول</button></p>
+      </div>
     </div>
-   </div><!-- Student Dashboard -->
-   <div id="page-student-dashboard" class="hidden min-h-full">
-    <header class="bg-black/30 py-4 px-6 flex justify-between items-center sticky top-0 z-40">
-     <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-full btn-primary flex items-center justify-center font-bold">
-       N
+
+    <!-- Pending Approval Page -->
+    <div id="page-pending" class="hidden min-h-full flex items-center justify-center p-6">
+      <div class="card-glass rounded-2xl p-8 w-full max-w-md text-center">
+        <div class="text-6xl mb-6">⏳</div>
+        <h2 class="text-3xl font-bold mb-4">في انتظار الموافقة</h2>
+        <p class="text-gray-300 mb-2">تم إرسال طلب التسجيل للمشرف.</p>
+        <p class="text-gray-400 text-sm mb-6">ستظهر لديك رسالة "تم قبول حسابك" عند موافقة المشرف</p>
+        <button onclick="showPage('main')" class="px-6 py-3 rounded-xl btn-primary font-bold">العودة للرئيسية</button>
       </div>
-      <div>
-       <h1 class="text-xl font-bold">NOUR NADY</h1>
-       <p id="student-welcome" class="text-xs text-gray-400">مرحباً</p>
-      </div>
-     </div>
-     <div class="flex gap-3"><button onclick="showStudentSection('courses')" class="px-4 py-2 rounded-lg hover:bg-white/10 transition">الكورسات</button> <button onclick="showStudentSection('exams')" class="px-4 py-2 rounded-lg hover:bg-white/10 transition">الامتحانات</button> <button onclick="showStudentSection('results')" class="px-4 py-2 rounded-lg hover:bg-white/10 transition">نتائجي</button> <button onclick="logoutStudent()" class="px-4 py-2 rounded-lg text-red-400 hover:bg-red-500/20 transition">خروج</button>
-     </div>
-    </header>
-    <div class="p-6"><!-- Student Courses Section -->
-     <div id="student-courses" class="max-w-6xl mx-auto">
-      <h2 class="text-3xl font-bold mb-6">📚 كورساتك</h2>
-      <div id="student-courses-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"><!-- Courses will be loaded here -->
-      </div>
-      <div id="no-courses-msg" class="hidden text-center py-20 text-gray-400">
-       <div class="text-6xl mb-4">
-        📭
-       </div>
-       <p class="text-xl">لا توجد كورسات متاحة لصفك حالياً</p>
-      </div>
-     </div><!-- Student Exams Section -->
-     <div id="student-exams" class="hidden max-w-6xl mx-auto">
-      <h2 class="text-3xl font-bold mb-6">📝 الامتحانات</h2>
-      <div id="student-exams-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"><!-- Exams will be loaded here -->
-      </div>
-      <div id="no-exams-msg" class="hidden text-center py-20 text-gray-400">
-       <div class="text-6xl mb-4">
-        📭
-       </div>
-       <p class="text-xl">لا توجد امتحانات متاحة لصفك حالياً</p>
-      </div>
-     </div><!-- Student Results Section -->
-     <div id="student-results" class="hidden max-w-4xl mx-auto">
-      <h2 class="text-3xl font-bold mb-6">🏆 نتائجي</h2>
-      <div id="student-results-list" class="space-y-4"><!-- Results will be loaded here -->
-      </div>
-      <div id="no-results-msg" class="hidden text-center py-20 text-gray-400">
-       <div class="text-6xl mb-4">
-        📊
-       </div>
-       <p class="text-xl">لم تقم بأداء أي امتحانات بعد</p>
-      </div>
-     </div>
     </div>
-   </div><!-- Video Player Page -->
-   <div id="page-video" class="hidden min-h-full">
-    <header class="bg-black/30 py-4 px-6 flex justify-between items-center"><button onclick="showPage('student-dashboard')" class="flex items-center gap-2 text-gray-300 hover:text-white"> <span>→</span> رجوع للكورسات </button>
-     <h1 id="video-title" class="text-xl font-bold">عنوان الفيديو</h1>
-    </header>
-    <div class="p-6 max-w-5xl mx-auto">
-     <div class="card-glass rounded-2xl overflow-hidden">
-      <div class="aspect-video bg-black flex items-center justify-center">
-       <video id="video-player" class="w-full h-full" controls onended="handleVideoEnded()" ontimeupdate="handleVideoProgress()"><source id="video-source" src="" type="video/mp4">
-       </video>
-      </div>
+
+    <!-- Student Dashboard -->
+    <div id="page-student-dashboard" class="hidden min-h-full">
+      <header class="bg-black/30 py-4 px-6 flex justify-between items-center sticky top-0 z-40">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full btn-primary flex items-center justify-center font-bold">N</div>
+          <div>
+            <h1 class="text-xl font-bold">NOUR NADY</h1>
+            <p id="student-welcome" class="text-xs text-gray-400">مرحباً</p>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <button onclick="showStudentSection('courses')" class="px-4 py-2 rounded-lg hover:bg-white/10 transition">الكورسات</button>
+          <button onclick="showStudentSection('exams')" class="px-4 py-2 rounded-lg hover:bg-white/10 transition">الامتحانات</button>
+          <button onclick="showStudentSection('results')" class="px-4 py-2 rounded-lg hover:bg-white/10 transition">نتائجي</button>
+          <button onclick="logoutStudent()" class="px-4 py-2 rounded-lg text-red-400 hover:bg-red-500/20 transition">خروج</button>
+        </div>
+      </header>
+
       <div class="p-6">
-       <h2 id="video-desc-title" class="text-2xl font-bold mb-4"></h2>
-       <p id="video-description" class="text-gray-300"></p>
-      </div>
-     </div>
-    </div>
-   </div><!-- Exam Page -->
-   <div id="page-exam" class="hidden min-h-full">
-    <header class="bg-black/30 py-4 px-6 flex justify-between items-center"><button onclick="showPage('student-dashboard'); showStudentSection('exams')" class="flex items-center gap-2 text-gray-300 hover:text-white"> <span>→</span> رجوع للامتحانات </button>
-     <h1 id="exam-page-title" class="text-xl font-bold">الامتحان</h1>
-    </header>
-    <div class="p-6 max-w-3xl mx-auto">
-     <div id="exam-questions-container" class="space-y-6"><!-- Questions will be loaded here -->
-     </div><button id="submit-exam-btn" onclick="submitExam()" class="w-full mt-8 py-4 rounded-xl btn-primary font-bold text-lg">تسليم الامتحان</button>
-    </div>
-   </div><!-- Exam Result Page -->
-   <div id="page-exam-result" class="hidden min-h-full flex items-center justify-center p-6">
-    <div class="card-glass rounded-2xl p-8 w-full max-w-2xl">
-     <div class="text-center mb-8">
-      <div id="result-emoji" class="text-8xl mb-4">
-       🎉
-      </div>
-      <h2 class="text-3xl font-bold mb-2">نتيجة الامتحان</h2>
-      <p id="result-score" class="text-5xl font-bold text-pink-500"></p>
-     </div>
-     <div id="result-details" class="space-y-4 mb-8"><!-- Detailed results will be shown here -->
-     </div><button onclick="showPage('student-dashboard'); showStudentSection('results')" class="w-full py-4 rounded-xl btn-primary font-bold text-lg">عرض جميع نتائجي</button>
-    </div>
-   </div><!-- Admin Login Page -->
-   <div id="page-admin-login" class="hidden min-h-full flex items-center justify-center p-6">
-    <div class="card-glass rounded-2xl p-8 w-full max-w-md"><button onclick="showPage('main')" class="text-gray-400 hover:text-white mb-4">→ رجوع</button>
-     <div class="text-center mb-8">
-      <div class="w-20 h-20 rounded-full btn-primary flex items-center justify-center text-4xl font-bold mx-auto mb-4">
-       👨‍💼
-      </div>
-      <h2 class="text-3xl font-bold">لوحة المشرف</h2>
-     </div>
-     <form id="admin-login-form" onsubmit="handleAdminLogin(event)">
-      <div class="mb-4"><label class="block mb-2 text-gray-300">البريد الإلكتروني</label> <input type="email" id="admin-email" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="admin@example.com">
-      </div>
-      <div class="mb-6"><label class="block mb-2 text-gray-300">كلمة السر</label> <input type="password" id="admin-password" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="••••••••">
-      </div><button type="submit" class="w-full py-4 rounded-xl btn-primary font-bold text-lg">دخول لوحة التحكم</button>
-     </form>
-    </div>
-   </div><!-- Admin Dashboard -->
-   <div id="page-admin-dashboard" class="hidden min-h-full flex"><!-- Sidebar -->
-    <aside class="w-64 bg-black/40 min-h-full p-4">
-     <div class="flex items-center gap-3 mb-8 p-4">
-      <div class="w-12 h-12 rounded-full btn-primary flex items-center justify-center text-xl font-bold">
-       👨‍💼
-      </div>
-      <div>
-       <h2 class="font-bold">المشرف</h2>
-       <p class="text-xs text-gray-400">NOUR NADY</p>
-      </div>
-     </div>
-     <nav class="space-y-2"><button onclick="showAdminSection('overview')" class="sidebar-item active w-full text-right px-4 py-3 rounded-lg transition flex items-center gap-3"> <span>📊</span> نظرة عامة </button> <button onclick="showAdminSection('students')" class="sidebar-item w-full text-right px-4 py-3 rounded-lg transition flex items-center gap-3"> <span>👥</span> الطلاب </button> <button onclick="showAdminSection('requests')" class="sidebar-item w-full text-right px-4 py-3 rounded-lg transition flex items-center gap-3"> <span>📩</span> طلبات التسجيل <span id="requests-badge" class="bg-red-500 text-white text-xs px-2 py-1 rounded-full hidden">0</span> </button> <button onclick="showAdminSection('courses')" class="sidebar-item w-full text-right px-4 py-3 rounded-lg transition flex items-center gap-3"> <span>📚</span> الكورسات </button> <button onclick="showAdminSection('exams')" class="sidebar-item w-full text-right px-4 py-3 rounded-lg transition flex items-center gap-3"> <span>📝</span> الامتحانات </button> <button onclick="showAdminSection('analytics')" class="sidebar-item w-full text-right px-4 py-3 rounded-lg transition flex items-center gap-3"> <span>📈</span> الإحصائيات </button>
-     </nav><button onclick="logoutAdmin()" class="w-full mt-8 px-4 py-3 rounded-lg text-red-400 hover:bg-red-500/20 transition flex items-center gap-3"> <span>🚪</span> تسجيل الخروج </button>
-    </aside><!-- Main Content -->
-    <main class="flex-1 p-6 overflow-auto"><!-- Overview Section -->
-     <div id="admin-overview" class="max-w-6xl">
-      <h1 class="text-3xl font-bold mb-8">📊 نظرة عامة</h1>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-       <div class="card-glass rounded-xl p-6">
-        <div class="text-4xl mb-2">
-         👥
+        <!-- Student Courses Section -->
+        <div id="student-courses" class="max-w-6xl mx-auto">
+          <h2 class="text-3xl font-bold mb-6">📚 كورساتك</h2>
+          <div id="student-courses-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Courses will be loaded here -->
+          </div>
+          <div id="no-courses-msg" class="hidden text-center py-20 text-gray-400">
+            <div class="text-6xl mb-4">📭</div>
+            <p class="text-xl">لا توجد كورسات متاحة لصفك حالياً</p>
+          </div>
         </div>
-        <p class="text-gray-400 text-sm">إجمالي الطلاب</p>
-        <p id="stat-total-students" class="text-3xl font-bold">0</p>
-       </div>
-       <div class="card-glass rounded-xl p-6">
-        <div class="text-4xl mb-2">
-         📚
+
+        <!-- Student Exams Section -->
+        <div id="student-exams" class="hidden max-w-6xl mx-auto">
+          <h2 class="text-3xl font-bold mb-6">📝 الامتحانات</h2>
+          <div id="student-exams-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Exams will be loaded here -->
+          </div>
+          <div id="no-exams-msg" class="hidden text-center py-20 text-gray-400">
+            <div class="text-6xl mb-4">📭</div>
+            <p class="text-xl">لا توجد امتحانات متاحة لصفك حالياً</p>
+          </div>
         </div>
-        <p class="text-gray-400 text-sm">الكورسات</p>
-        <p id="stat-total-courses" class="text-3xl font-bold">0</p>
-       </div>
-       <div class="card-glass rounded-xl p-6">
-        <div class="text-4xl mb-2">
-         👁️
+
+        <!-- Student Results Section -->
+        <div id="student-results" class="hidden max-w-4xl mx-auto">
+          <h2 class="text-3xl font-bold mb-6">🏆 نتائجي</h2>
+          <div id="student-results-list" class="space-y-4">
+            <!-- Results will be loaded here -->
+          </div>
+          <div id="no-results-msg" class="hidden text-center py-20 text-gray-400">
+            <div class="text-6xl mb-4">📊</div>
+            <p class="text-xl">لم تقم بأداء أي امتحانات بعد</p>
+          </div>
         </div>
-        <p class="text-gray-400 text-sm">مشاهدات الفيديو</p>
-        <p id="stat-total-views" class="text-3xl font-bold">0</p>
-       </div>
-       <div class="card-glass rounded-xl p-6">
-        <div class="text-4xl mb-2">
-         ✅
-        </div>
-        <p class="text-gray-400 text-sm">فيديوهات مكتملة</p>
-        <p id="stat-completed-views" class="text-3xl font-bold">0</p>
-       </div>
       </div>
-     </div><!-- Students Section -->
-     <div id="admin-students" class="hidden max-w-6xl">
-      <h1 class="text-3xl font-bold mb-8">👥 الطلاب المسجلين</h1>
-      <div class="card-glass rounded-xl overflow-hidden">
-       <table class="w-full">
-        <thead class="bg-black/30">
-         <tr>
-          <th class="text-right px-6 py-4">الاسم</th>
-          <th class="text-right px-6 py-4">الموبايل</th>
-          <th class="text-right px-6 py-4">الصف</th>
-          <th class="text-right px-6 py-4">الحالة</th>
-          <th class="text-right px-6 py-4">إجراءات</th>
-         </tr>
-        </thead>
-        <tbody id="students-table-body"><!-- Students will be loaded here -->
-        </tbody>
-       </table>
-      </div>
-     </div><!-- Requests Section -->
-     <div id="admin-requests" class="hidden max-w-6xl">
-      <h1 class="text-3xl font-bold mb-8">📩 طلبات التسجيل</h1>
-      <div id="requests-list" class="space-y-4"><!-- Requests will be loaded here -->
-      </div>
-      <div id="no-requests-msg" class="hidden text-center py-20 text-gray-400">
-       <div class="text-6xl mb-4">
-        📭
-       </div>
-       <p class="text-xl">لا توجد طلبات جديدة</p>
-      </div>
-     </div><!-- Courses Management Section -->
-     <div id="admin-courses" class="hidden max-w-6xl">
-      <div class="flex justify-between items-center mb-8">
-       <h1 class="text-3xl font-bold">📚 إدارة الكورسات</h1><button onclick="showAddCourseModal()" class="px-6 py-3 rounded-xl btn-primary font-bold flex items-center gap-2"> <span>+</span> إضافة كورس </button>
-      </div>
-      <div id="admin-courses-list" class="space-y-4"><!-- Courses will be loaded here -->
-      </div>
-      <div id="no-admin-courses-msg" class="hidden text-center py-20 text-gray-400">
-       <div class="text-6xl mb-4">
-        📚
-       </div>
-       <p class="text-xl">لم تقم بإضافة أي كورسات بعد</p>
-      </div>
-     </div><!-- Exams Management Section -->
-     <div id="admin-exams" class="hidden max-w-6xl">
-      <div class="flex justify-between items-center mb-8">
-       <h1 class="text-3xl font-bold">📝 إدارة الامتحانات</h1><button onclick="showAddExamModal()" class="px-6 py-3 rounded-xl btn-primary font-bold flex items-center gap-2"> <span>+</span> إضافة امتحان </button>
-      </div>
-      <div id="admin-exams-list" class="space-y-4"><!-- Exams will be loaded here -->
-      </div>
-      <div id="no-admin-exams-msg" class="hidden text-center py-20 text-gray-400">
-       <div class="text-6xl mb-4">
-        📝
-       </div>
-       <p class="text-xl">لم تقم بإضافة أي امتحانات بعد</p>
-      </div>
-     </div><!-- Analytics Section -->
-     <div id="admin-analytics" class="hidden max-w-6xl">
-      <h1 class="text-3xl font-bold mb-8">📈 الإحصائيات التفصيلية</h1>
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-       <div class="card-glass rounded-xl p-6">
-        <h3 class="text-xl font-bold mb-4">👁️ مشاهدات الفيديو</h3>
-        <div id="video-views-list" class="space-y-3 max-h-96 overflow-auto"><!-- Video views will be loaded here -->
-        </div>
-       </div>
-       <div class="card-glass rounded-xl p-6">
-        <h3 class="text-xl font-bold mb-4">📊 نتائج الامتحانات</h3>
-        <div id="exam-results-list" class="space-y-3 max-h-96 overflow-auto"><!-- Exam results will be loaded here -->
-        </div>
-       </div>
-      </div>
-     </div>
-    </main>
-   </div><!-- Add Course Modal -->
-   <div id="course-modal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-    <div class="card-glass rounded-2xl p-8 w-full max-w-lg max-h-[90%] overflow-auto">
-     <div class="flex justify-between items-center mb-6">
-      <h2 id="course-modal-title" class="text-2xl font-bold">إضافة كورس جديد</h2><button onclick="closeCourseModal()" class="text-gray-400 hover:text-white text-2xl">×</button>
-     </div>
-     <form id="course-form" onsubmit="handleSaveCourse(event)"><input type="hidden" id="course-edit-id">
-      <div class="mb-4"><label class="block mb-2 text-gray-300">عنوان الكورس</label> <input type="text" id="course-title-input" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="مثال: الجبر - الوحدة الأولى">
-      </div>
-      <div class="mb-4"><label class="block mb-2 text-gray-300">الصف الدراسي</label> <select id="course-grade-input" required class="w-full px-4 py-3 rounded-lg input-style text-white bg-transparent"> <option value="" class="bg-gray-800">اختر الصف</option> <option value="prep1" class="bg-gray-800">أولى إعدادي</option> <option value="prep2" class="bg-gray-800">تانية إعدادي</option> <option value="prep3" class="bg-gray-800">تالتة إعدادي</option> <option value="sec1" class="bg-gray-800">أولى ثانوي</option> <option value="sec2" class="bg-gray-800">تانية ثانوي</option> <option value="sec3" class="bg-gray-800">تالتة ثانوي</option> </select>
-      </div>
-      <div class="mb-4"><label class="block mb-2 text-gray-300">رابط الفيديو</label> <input type="url" id="course-video-input" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="https://...">
-      </div>
-      <div class="mb-6"><label class="block mb-2 text-gray-300">وصف الكورس</label> <textarea id="course-desc-input" rows="3" class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="وصف مختصر للكورس..."></textarea>
-      </div><button type="submit" class="w-full py-4 rounded-xl btn-primary font-bold text-lg">حفظ الكورس</button>
-     </form>
     </div>
-   </div><!-- Add Exam Modal -->
-   <div id="exam-modal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-    <div class="card-glass rounded-2xl p-8 w-full max-w-2xl max-h-[90%] overflow-auto">
-     <div class="flex justify-between items-center mb-6">
-      <h2 id="exam-modal-title" class="text-2xl font-bold">إضافة امتحان جديد</h2><button onclick="closeExamModal()" class="text-gray-400 hover:text-white text-2xl">×</button>
-     </div>
-     <form id="exam-form" onsubmit="handleSaveExam(event)"><input type="hidden" id="exam-edit-id">
-      <div class="mb-4"><label class="block mb-2 text-gray-300">عنوان الامتحان</label> <input type="text" id="exam-title-input" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="مثال: امتحان الوحدة الأولى">
-      </div>
-      <div class="mb-4"><label class="block mb-2 text-gray-300">الصف الدراسي</label> <select id="exam-grade-input" required class="w-full px-4 py-3 rounded-lg input-style text-white bg-transparent"> <option value="" class="bg-gray-800">اختر الصف</option> <option value="prep1" class="bg-gray-800">أولى إعدادي</option> <option value="prep2" class="bg-gray-800">تانية إعدادي</option> <option value="prep3" class="bg-gray-800">تالتة إعدادي</option> <option value="sec1" class="bg-gray-800">أولى ثانوي</option> <option value="sec2" class="bg-gray-800">تانية ثانوي</option> <option value="sec3" class="bg-gray-800">تالتة ثانوي</option> </select>
-      </div>
-      <div id="questions-container" class="space-y-6 mb-6"><!-- Questions will be added here -->
-      </div><button type="button" onclick="addQuestionField()" class="w-full py-3 rounded-xl border-2 border-dashed border-gray-500 text-gray-400 hover:border-pink-500 hover:text-pink-500 transition mb-6"> + إضافة سؤال </button> <button type="submit" class="w-full py-4 rounded-xl btn-primary font-bold text-lg">حفظ الامتحان</button>
-     </form>
-    </div>
-   </div><!-- Delete Confirmation Modal -->
-   <div id="delete-modal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-    <div class="card-glass rounded-2xl p-8 w-full max-w-md text-center">
-     <div class="text-6xl mb-4">
-      ⚠️
-     </div>
-     <h2 class="text-2xl font-bold mb-4">تأكيد الحذف</h2>
-     <p id="delete-message" class="text-gray-300 mb-6">هل أنت متأكد من حذف هذا العنصر؟</p>
-     <div class="flex gap-4"><button onclick="closeDeleteModal()" class="flex-1 py-3 rounded-xl card-glass hover:bg-white/10 transition font-bold">إلغاء</button> <button id="confirm-delete-btn" class="flex-1 py-3 rounded-xl bg-red-500 hover:bg-red-600 transition font-bold">حذف</button>
-     </div>
-    </div>
-   </div>
-  </div>
-  <script>
-    // ============ Global State ============
-    let allData = [];
-    let currentStudent = null;
-    let isAdmin = false;
-    let currentExam = null;
-    let currentExamAnswers = {};
-    let currentVideoId = null;
-    let deleteCallback = null;
-    let questionCount = 0;
 
-    const defaultConfig = {
-      platform_name: 'NOUR NADY',
-      welcome_message: 'مرحباً بك في منصة نور نادي التعليمية'
-    };
-
-    const ADMIN_EMAIL = 'noornady00@gmeil.com';
-    const ADMIN_PASSWORD = 'noornady2007';
-
-    const GRADE_NAMES = {
-      prep1: 'أولى إعدادي',
-      prep2: 'تانية إعدادي',
-      prep3: 'تالتة إعدادي',
-      sec1: 'أولى ثانوي',
-      sec2: 'تانية ثانوي',
-      sec3: 'تالتة ثانوي'
-    };
-
-    // ============ Toast Notifications ============
-    function showToast(message, type = 'info') {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      const colors = {
-        success: 'bg-green-500',
-        error: 'bg-red-500',
-        info: 'bg-blue-500',
-        warning: 'bg-yellow-500'
-      };
-      toast.className = `toast ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg`;
-      toast.textContent = message;
-      container.appendChild(toast);
-      setTimeout(() => toast.remove(), 4000);
-    }
-
-    function showLoading(show) {
-      document.getElementById('loading-overlay').classList.toggle('hidden', !show);
-    }
-
-    // ============ Page Navigation ============
-    function showPage(pageName) {
-      const pages = ['main', 'login', 'register', 'pending', 'student-dashboard', 'video', 'exam', 'exam-result', 'admin-login', 'admin-dashboard'];
-      pages.forEach(p => {
-        document.getElementById(`page-${p}`).classList.add('hidden');
-      });
-      document.getElementById(`page-${pageName}`).classList.remove('hidden');
-      
-      if (pageName === 'student-dashboard') {
-        showStudentSection('courses');
-        loadStudentCourses();
-      }
-      if (pageName === 'admin-dashboard') {
-        showAdminSection('overview');
-        updateAdminStats();
-      }
-    }
-
-    function showStudentSection(section) {
-      ['courses', 'exams', 'results'].forEach(s => {
-        document.getElementById(`student-${s}`).classList.add('hidden');
-      });
-      document.getElementById(`student-${section}`).classList.remove('hidden');
-      
-      if (section === 'courses') loadStudentCourses();
-      if (section === 'exams') loadStudentExams();
-      if (section === 'results') loadStudentResults();
-    }
-
-    function showAdminSection(section) {
-      ['overview', 'students', 'requests', 'courses', 'exams', 'analytics'].forEach(s => {
-        document.getElementById(`admin-${s}`).classList.add('hidden');
-      });
-      document.getElementById(`admin-${section}`).classList.remove('hidden');
-      
-      document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
-      event.target.closest('.sidebar-item')?.classList.add('active');
-      
-      if (section === 'overview') updateAdminStats();
-      if (section === 'students') loadStudentsTable();
-      if (section === 'requests') loadPendingRequests();
-      if (section === 'courses') loadAdminCourses();
-      if (section === 'exams') loadAdminExams();
-      if (section === 'analytics') loadAnalytics();
-    }
-
-    // ============ Student Authentication ============
-    async function handleStudentRegister(e) {
-      e.preventDefault();
-      const name = document.getElementById('reg-name').value.trim();
-      const phone = document.getElementById('reg-phone').value.trim();
-      const password = document.getElementById('reg-password').value;
-      const grade = document.getElementById('reg-grade').value;
-
-      if (!name || !phone || !password || !grade) {
-        showToast('برجاء ملء جميع البيانات', 'error');
-        return;
-      }
-
-      const existingStudent = allData.find(d => d.type === 'student' && d.phone === phone);
-      if (existingStudent) {
-        showToast('رقم الموبايل مسجل بالفعل', 'error');
-        return;
-      }
-
-      if (allData.length >= 999) {
-        showToast('تم الوصول للحد الأقصى من البيانات', 'error');
-        return;
-      }
-
-      showLoading(true);
-      const result = await window.dataSdk.create({
-        type: 'student',
-        student_name: name,
-        phone: phone,
-        password: password,
-        grade: grade,
-        status: 'pending',
-        created_at: new Date().toISOString()
-      });
-      showLoading(false);
-
-      if (result.isOk) {
-        showToast('تم إرسال طلب التسجيل بنجاح', 'success');
-        showPage('pending');
-        document.getElementById('register-form').reset();
-      } else {
-        showToast('حدث خطأ، حاول مرة أخرى', 'error');
-      }
-    }
-
-    async function handleStudentLogin(e) {
-      e.preventDefault();
-      const phone = document.getElementById('login-phone').value.trim();
-      const password = document.getElementById('login-password').value;
-
-      const student = allData.find(d => d.type === 'student' && d.phone === phone && d.password === password);
-      
-      if (!student) {
-        showToast('بيانات الدخول غير صحيحة', 'error');
-        return;
-      }
-
-      if (student.status === 'pending') {
-        showToast('حسابك في انتظار موافقة المشرف', 'warning');
-        showPage('pending');
-        return;
-      }
-
-      if (student.status === 'rejected') {
-        showToast('تم رفض طلب التسجيل', 'error');
-        return;
-      }
-
-      currentStudent = student;
-      localStorage.setItem('currentStudent', JSON.stringify(student));
-      document.getElementById('student-welcome').textContent = `مرحباً ${student.student_name}`;
-      showToast(`مرحباً ${student.student_name}!`, 'success');
-      showPage('student-dashboard');
-      document.getElementById('login-form').reset();
-    }
-
-    function logoutStudent() {
-      currentStudent = null;
-      localStorage.removeItem('currentStudent');
-      showToast('تم تسجيل الخروج', 'info');
-      showPage('main');
-    }
-
-    // ============ Admin Authentication ============
-    function handleAdminLogin(e) {
-      e.preventDefault();
-      const email = document.getElementById('admin-email').value.trim();
-      const password = document.getElementById('admin-password').value;
-
-      if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-        isAdmin = true;
-        localStorage.setItem('isAdmin', 'true');
-        showToast('مرحباً بك في لوحة التحكم', 'success');
-        showPage('admin-dashboard');
-        document.getElementById('admin-login-form').reset();
-      } else {
-        showToast('بيانات الدخول غير صحيحة', 'error');
-      }
-    }
-
-    function logoutAdmin() {
-      isAdmin = false;
-      localStorage.removeItem('isAdmin');
-      showToast('تم تسجيل الخروج', 'info');
-      showPage('main');
-    }
-
-    // ============ Student Dashboard ============
-    function loadStudentCourses() {
-      if (!currentStudent) return;
-      const courses = allData.filter(d => d.type === 'course' && d.course_grade === currentStudent.grade);
-      const grid = document.getElementById('student-courses-grid');
-      const noMsg = document.getElementById('no-courses-msg');
-
-      if (courses.length === 0) {
-        grid.innerHTML = '';
-        noMsg.classList.remove('hidden');
-        return;
-      }
-
-      noMsg.classList.add('hidden');
-      grid.innerHTML = courses.map(course => `
-        <div class="course-card card-glass rounded-xl overflow-hidden cursor-pointer" onclick="openVideo('${course.__backendId}')">
-          <div class="h-40 bg-gradient-to-br from-pink-500/30 to-purple-500/30 flex items-center justify-center">
-            <span class="text-6xl">📚</span>
+    <!-- Video Player Page -->
+    <div id="page-video" class="hidden min-h-full">
+      <header class="bg-black/30 py-4 px-6 flex justify-between items-center">
+        <button onclick="showPage('student-dashboard')" class="flex items-center gap-2 text-gray-300 hover:text-white">
+          <span>→</span> رجوع للكورسات
+        </button>
+        <h1 id="video-title" class="text-xl font-bold">عنوان الفيديو</h1>
+      </header>
+      <div class="p-6 max-w-5xl mx-auto">
+        <div class="card-glass rounded-2xl overflow-hidden">
+          <div class="aspect-video bg-black flex items-center justify-center">
+            <video id="video-player" class="w-full h-full" controls onended="handleVideoEnded()" ontimeupdate="handleVideoProgress()">
+              <source id="video-source" src="" type="video/mp4">
+            </video>
           </div>
           <div class="p-6">
-            <h3 class="text-xl font-bold mb-2">${course.course_title}</h3>
-            <p class="text-gray-400 text-sm mb-4">${course.course_description || 'لا يوجد وصف'}</p>
-            <div class="flex items-center gap-2 text-pink-400">
-              <span>▶️</span> شاهد الآن
-            </div>
+            <h2 id="video-desc-title" class="text-2xl font-bold mb-4"></h2>
+            <p id="video-description" class="text-gray-300"></p>
           </div>
         </div>
-      `).join('');
-    }
+      </div>
+    </div>
 
-    function loadStudentExams() {
-      if (!currentStudent) return;
-      const exams = allData.filter(d => d.type === 'exam' && d.exam_grade === currentStudent.grade);
-      const grid = document.getElementById('student-exams-grid');
-      const noMsg = document.getElementById('no-exams-msg');
-
-      if (exams.length === 0) {
-        grid.innerHTML = '';
-        noMsg.classList.remove('hidden');
-        return;
-      }
-
-      noMsg.classList.add('hidden');
-      grid.innerHTML = exams.map(exam => {
-        const taken = allData.find(d => d.type === 'exam_result' && d.exam_result_exam === exam.__backendId && d.exam_result_student === currentStudent.__backendId);
-        return `
-          <div class="course-card card-glass rounded-xl p-6 cursor-pointer" onclick="startExam('${exam.__backendId}')">
-            <div class="text-5xl mb-4">📝</div>
-            <h3 class="text-xl font-bold mb-2">${exam.exam_title}</h3>
-            <p class="text-gray-400 text-sm mb-4">${GRADE_NAMES[exam.exam_grade]}</p>
-            ${taken ? `<span class="text-green-400">✅ تم الحل - ${taken.exam_result_score}/${taken.exam_result_total}</span>` : '<span class="text-pink-400">ابدأ الامتحان</span>'}
-          </div>
-        `;
-      }).join('');
-    }
-
-    function loadStudentResults() {
-      if (!currentStudent) return;
-      const results = allData.filter(d => d.type === 'exam_result' && d.exam_result_student === currentStudent.__backendId);
-      const list = document.getElementById('student-results-list');
-      const noMsg = document.getElementById('no-results-msg');
-
-      if (results.length === 0) {
-        list.innerHTML = '';
-        noMsg.classList.remove('hidden');
-        return;
-      }
-
-      noMsg.classList.add('hidden');
-      list.innerHTML = results.map(result => {
-        const exam = allData.find(d => d.type === 'exam' && d.__backendId === result.exam_result_exam);
-        const percentage = Math.round((result.exam_result_score / result.exam_result_total) * 100);
-        const color = percentage >= 50 ? 'text-green-400' : 'text-red-400';
-        return `
-          <div class="card-glass rounded-xl p-6 flex justify-between items-center">
-            <div>
-              <h3 class="text-lg font-bold">${exam?.exam_title || 'امتحان محذوف'}</h3>
-              <p class="text-gray-400 text-sm">${GRADE_NAMES[exam?.exam_grade] || ''}</p>
-            </div>
-            <div class="text-center">
-              <p class="${color} text-3xl font-bold">${result.exam_result_score}/${result.exam_result_total}</p>
-              <p class="text-gray-400 text-sm">${percentage}%</p>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    // ============ Video Player ============
-    async function openVideo(courseId) {
-      const course = allData.find(d => d.__backendId === courseId);
-      if (!course) return;
-
-      currentVideoId = courseId;
-      document.getElementById('video-title').textContent = course.course_title;
-      document.getElementById('video-desc-title').textContent = course.course_title;
-      document.getElementById('video-description').textContent = course.course_description || '';
-      document.getElementById('video-source').src = course.course_video_url;
-      document.getElementById('video-player').load();
-      
-      showPage('video');
-
-      // Record view
-      if (allData.length < 999) {
-        const existingView = allData.find(d => d.type === 'video_view' && d.video_view_student === currentStudent.__backendId && d.video_view_course === courseId);
-        if (!existingView) {
-          await window.dataSdk.create({
-            type: 'video_view',
-            video_view_student: currentStudent.__backendId,
-            video_view_course: courseId,
-            video_view_completed: 'false',
-            created_at: new Date().toISOString()
-          });
-        }
-      }
-    }
-
-    async function handleVideoEnded() {
-      const view = allData.find(d => d.type === 'video_view' && d.video_view_student === currentStudent.__backendId && d.video_view_course === currentVideoId);
-      if (view && view.video_view_completed === 'false') {
-        await window.dataSdk.update({ ...view, video_view_completed: 'true' });
-      }
-    }
-
-    function handleVideoProgress() {
-      // Track progress if needed
-    }
-
-    // ============ Exam System ============
-    function startExam(examId) {
-      const exam = allData.find(d => d.__backendId === examId);
-      if (!exam) return;
-
-      currentExam = exam;
-      currentExamAnswers = {};
-      
-      let questions;
-      try {
-        questions = JSON.parse(exam.exam_questions);
-      } catch (e) {
-        showToast('خطأ في تحميل الامتحان', 'error');
-        return;
-      }
-
-      document.getElementById('exam-page-title').textContent = exam.exam_title;
-      const container = document.getElementById('exam-questions-container');
-      
-      container.innerHTML = questions.map((q, i) => `
-        <div class="card-glass rounded-xl p-6">
-          <h3 class="text-lg font-bold mb-4">السؤال ${i + 1}: ${q.question}</h3>
-          <div class="space-y-3">
-            ${q.options.map((opt, j) => `
-              <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 cursor-pointer transition">
-                <input type="radio" name="q${i}" value="${j}" onchange="currentExamAnswers[${i}] = ${j}" class="w-5 h-5 accent-pink-500">
-                <span>${opt}</span>
-              </label>
-            `).join('')}
-          </div>
+    <!-- Exam Page -->
+    <div id="page-exam" class="hidden min-h-full">
+      <header class="bg-black/30 py-4 px-6 flex justify-between items-center">
+        <button onclick="showPage('student-dashboard'); showStudentSection('exams')" class="flex items-center gap-2 text-gray-300 hover:text-white">
+          <span>→</span> رجوع للامتحانات
+        </button>
+        <h1 id="exam-page-title" class="text-xl font-bold">الامتحان</h1>
+      </header>
+      <div class="p-6 max-w-3xl mx-auto">
+        <div id="exam-questions-container" class="space-y-6">
+          <!-- Questions will be loaded here -->
         </div>
-      `).join('');
+        <button id="submit-exam-btn" onclick="submitExam()" class="w-full mt-8 py-4 rounded-xl btn-primary font-bold text-lg">تسليم الامتحان</button>
+      </div>
+    </div>
 
-      showPage('exam');
-    }
-
-    async function submitExam() {
-      if (!currentExam) return;
-
-      let questions;
-      try {
-        questions = JSON.parse(currentExam.exam_questions);
-      } catch (e) {
-        showToast('خطأ في الامتحان', 'error');
-        return;
-      }
-
-      let score = 0;
-      const results = questions.map((q, i) => {
-        const userAnswer = currentExamAnswers[i];
-        const correct = userAnswer === q.correct;
-        if (correct) score++;
-        return { question: q.question, userAnswer, correctAnswer: q.correct, correct, options: q.options };
-      });
-
-      showLoading(true);
-      const result = await window.dataSdk.create({
-        type: 'exam_result',
-        exam_result_student: currentStudent.__backendId,
-        exam_result_exam: currentExam.__backendId,
-        exam_result_score: score,
-        exam_result_total: questions.length,
-        exam_result_answers: JSON.stringify(results),
-        created_at: new Date().toISOString()
-      });
-      showLoading(false);
-
-      if (result.isOk) {
-        showExamResult(score, questions.length, results);
-      } else {
-        showToast('حدث خطأ في حفظ النتيجة', 'error');
-      }
-    }
-
-    function showExamResult(score, total, results) {
-      const percentage = Math.round((score / total) * 100);
-      document.getElementById('result-emoji').textContent = percentage >= 50 ? '🎉' : '😢';
-      document.getElementById('result-score').textContent = `${score} / ${total}`;
-      
-      const detailsContainer = document.getElementById('result-details');
-      detailsContainer.innerHTML = results.map((r, i) => `
-        <div class="card-glass rounded-lg p-4 ${r.correct ? 'border-l-4 border-green-500' : 'border-l-4 border-red-500'}">
-          <p class="font-bold mb-2">السؤال ${i + 1}: ${r.question}</p>
-          <p class="${r.correct ? 'text-green-400' : 'text-red-400'}">
-            إجابتك: ${r.options[r.userAnswer] || 'لم تجب'}
-          </p>
-          ${!r.correct ? `<p class="text-green-400">الإجابة الصحيحة: ${r.options[r.correctAnswer]}</p>` : ''}
+    <!-- Exam Result Page -->
+    <div id="page-exam-result" class="hidden min-h-full flex items-center justify-center p-6">
+      <div class="card-glass rounded-2xl p-8 w-full max-w-2xl">
+        <div class="text-center mb-8">
+          <div id="result-emoji" class="text-8xl mb-4">🎉</div>
+          <h2 class="text-3xl font-bold mb-2">نتيجة الامتحان</h2>
+          <p id="result-score" class="text-5xl font-bold text-pink-500"></p>
         </div>
-      `).join('');
+        <div id="result-details" class="space-y-4 mb-8">
+          <!-- Detailed results will be shown here -->
+        </div>
+        <button onclick="showPage('student-dashboard'); showStudentSection('results')" class="w-full py-4 rounded-xl btn-primary font-bold text-lg">عرض جميع نتائجي</button>
+      </div>
+    </div>
 
-      showPage('exam-result');
-    }
+    <!-- Admin Login Page -->
+    <div id="page-admin-login" class="hidden min-h-full flex items-center justify-center p-6">
+      <div class="card-glass rounded-2xl p-8 w-full max-w-md">
+        <button onclick="showPage('main')" class="text-gray-400 hover:text-white mb-4">→ رجوع</button>
+        <div class="text-center mb-8">
+          <div class="w-20 h-20 rounded-full btn-primary flex items-center justify-center text-4xl font-bold mx-auto mb-4">👨‍💼</div>
+          <h2 class="text-3xl font-bold">لوحة المشرف</h2>
+        </div>
+        <form id="admin-login-form" onsubmit="handleAdminLogin(event)">
+          <div class="mb-4">
+            <label class="block mb-2 text-gray-300">البريد الإلكتروني</label>
+            <input type="email" id="admin-email" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="admin@example.com">
+          </div>
+          <div class="mb-6">
+            <label class="block mb-2 text-gray-300">كلمة السر</label>
+            <input type="password" id="admin-password" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="••••••••">
+          </div>
+          <button type="submit" class="w-full py-4 rounded-xl btn-primary font-bold text-lg">دخول لوحة التحكم</button>
+        </form>
+      </div>
+    </div>
 
-    // ============ Admin Functions ============
-    function updateAdminStats() {
-      const students = allData.filter(d => d.type === 'student' && d.status === 'approved');
-      const courses = allData.filter(d => d.type === 'course');
-      const views = allData.filter(d => d.type === 'video_view');
-      const completedViews = views.filter(v => v.video_view_completed === 'true');
-
-      document.getElementById('stat-total-students').textContent = students.length;
-      document.getElementById('stat-total-courses').textContent = courses.length;
-      document.getElementById('stat-total-views').textContent = views.length;
-      document.getElementById('stat-completed-views').textContent = completedViews.length;
-
-      // Update requests badge
-      const pendingRequests = allData.filter(d => d.type === 'student' && d.status === 'pending');
-      const badge = document.getElementById('requests-badge');
-      if (pendingRequests.length > 0) {
-        badge.textContent = pendingRequests.length;
-        badge.classList.remove('hidden');
-      } else {
-        badge.classList.add('hidden');
-      }
-    }
-
-    function loadStudentsTable() {
-      const students = allData.filter(d => d.type === 'student');
-      const tbody = document.getElementById('students-table-body');
-      
-      tbody.innerHTML = students.map(s => `
-        <tr class="border-t border-white/10">
-          <td class="px-6 py-4">${s.student_name}</td>
-          <td class="px-6 py-4">${s.phone}</td>
-          <td class="px-6 py-4">${GRADE_NAMES[s.grade]}</td>
-          <td class="px-6 py-4">
-            <span class="px-3 py-1 rounded-full text-sm ${s.status === 'approved' ? 'bg-green-500/20 text-green-400' : s.status === 'pending' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-red-500/20 text-red-400'}">
-              ${s.status === 'approved' ? 'مفعّل' : s.status === 'pending' ? 'معلق' : 'مرفوض'}
-            </span>
-          </td>
-          <td class="px-6 py-4">
-            <button onclick="confirmDelete('${s.__backendId}', 'student')" class="text-red-400 hover:text-red-300">حذف</button>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    function loadPendingRequests() {
-      const requests = allData.filter(d => d.type === 'student' && d.status === 'pending');
-      const container = document.getElementById('requests-list');
-      const noMsg = document.getElementById('no-requests-msg');
-
-      if (requests.length === 0) {
-        container.innerHTML = '';
-        noMsg.classList.remove('hidden');
-        return;
-      }
-
-      noMsg.classList.add('hidden');
-      container.innerHTML = requests.map(r => `
-        <div class="card-glass rounded-xl p-6 flex justify-between items-center">
+    <!-- Admin Dashboard -->
+    <div id="page-admin-dashboard" class="hidden min-h-full flex">
+      <!-- Sidebar -->
+      <aside class="w-64 bg-black/40 min-h-full p-4">
+        <div class="flex items-center gap-3 mb-8 p-4">
+          <div class="w-12 h-12 rounded-full btn-primary flex items-center justify-center text-xl font-bold">👨‍💼</div>
           <div>
-            <h3 class="text-lg font-bold">${r.student_name}</h3>
-            <p class="text-gray-400">${r.phone} - ${GRADE_NAMES[r.grade]}</p>
-          </div>
-          <div class="flex gap-3">
-            <button onclick="approveStudent('${r.__backendId}')" class="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 transition">قبول</button>
-            <button onclick="rejectStudent('${r.__backendId}')" class="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 transition">رفض</button>
+            <h2 class="font-bold">المشرف</h2>
+            <p class="text-xs text-gray-400">NOUR NADY</p>
           </div>
         </div>
-      `).join('');
-    }
+        <nav class="space-y-2">
+          <button onclick="showAdminSection('overview')" class="sidebar-item active w-full text-right px-4 py-3 rounded-lg transition flex items-center gap-3">
+            <span>📊</span> نظرة عامة
+          </button>
+          <button onclick="showAdminSection('students')" class="sidebar-item w-full text-right px-4 py-3 rounded-lg transition flex items-center gap-3">
+            <span>👥</span> الطلاب
+          </button>
+          <button onclick="showAdminSection('requests')" class="sidebar-item w-full text-right px-4 py-3 rounded-lg transition flex items-center gap-3">
+            <span>📩</span> طلبات التسجيل
+            <span id="requests-badge" class="bg-red-500 text-white text-xs px-2 py-1 rounded-full hidden">0</span>
+          </button>
+          <button onclick="showAdminSection('courses')" class="sidebar-item w-full text-right px-4 py-3 rounded-lg transition flex items-center gap-3">
+            <span>📚</span> الكورسات
+          </button>
+          <button onclick="showAdminSection('exams')" class="sidebar-item w-full text-right px-4 py-3 rounded-lg transition flex items-center gap-3">
+            <span>📝</span> الامتحانات
+          </button>
+          <button onclick="showAdminSection('analytics')" class="sidebar-item w-full text-right px-4 py-3 rounded-lg transition flex items-center gap-3">
+            <span>📈</span> الإحصائيات
+          </button>
+        </nav>
+        <button onclick="logoutAdmin()" class="w-full mt-8 px-4 py-3 rounded-lg text-red-400 hover:bg-red-500/20 transition flex items-center gap-3">
+          <span>🚪</span> تسجيل الخروج
+        </button>
+      </aside>
 
-    async function approveStudent(id) {
-      const student = allData.find(d => d.__backendId === id);
-      if (!student) return;
-      showLoading(true);
-      await window.dataSdk.update({ ...student, status: 'approved' });
-      showLoading(false);
-      showToast('تم قبول الطالب', 'success');
-    }
-
-    async function rejectStudent(id) {
-      const student = allData.find(d => d.__backendId === id);
-      if (!student) return;
-      showLoading(true);
-      await window.dataSdk.update({ ...student, status: 'rejected' });
-      showLoading(false);
-      showToast('تم رفض الطالب', 'info');
-    }
-
-    // ============ Course Management ============
-    function loadAdminCourses() {
-      const courses = allData.filter(d => d.type === 'course');
-      const container = document.getElementById('admin-courses-list');
-      const noMsg = document.getElementById('no-admin-courses-msg');
-
-      if (courses.length === 0) {
-        container.innerHTML = '';
-        noMsg.classList.remove('hidden');
-        return;
-      }
-
-      noMsg.classList.add('hidden');
-      container.innerHTML = courses.map(c => `
-        <div class="card-glass rounded-xl p-6 flex justify-between items-center">
-          <div>
-            <h3 class="text-lg font-bold">${c.course_title}</h3>
-            <p class="text-gray-400">${GRADE_NAMES[c.course_grade]} - ${c.course_description || 'لا يوجد وصف'}</p>
-          </div>
-          <div class="flex gap-3">
-            <button onclick="editCourse('${c.__backendId}')" class="px-4 py-2 rounded-lg card-glass hover:bg-white/10 transition">تعديل</button>
-            <button onclick="confirmDelete('${c.__backendId}', 'course')" class="px-4 py-2 rounded-lg text-red-400 hover:bg-red-500/20 transition">حذف</button>
+      <!-- Main Content -->
+      <main class="flex-1 p-6 overflow-auto">
+        <!-- Overview Section -->
+        <div id="admin-overview" class="max-w-6xl">
+          <h1 class="text-3xl font-bold mb-8">📊 نظرة عامة</h1>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="card-glass rounded-xl p-6">
+              <div class="text-4xl mb-2">👥</div>
+              <p class="text-gray-400 text-sm">إجمالي الطلاب</p>
+              <p id="stat-total-students" class="text-3xl font-bold">0</p>
+            </div>
+            <div class="card-glass rounded-xl p-6">
+              <div class="text-4xl mb-2">📚</div>
+              <p class="text-gray-400 text-sm">الكورسات</p>
+              <p id="stat-total-courses" class="text-3xl font-bold">0</p>
+            </div>
+            <div class="card-glass rounded-xl p-6">
+              <div class="text-4xl mb-2">👁️</div>
+              <p class="text-gray-400 text-sm">مشاهدات الفيديو</p>
+              <p id="stat-total-views" class="text-3xl font-bold">0</p>
+            </div>
+            <div class="card-glass rounded-xl p-6">
+              <div class="text-4xl mb-2">✅</div>
+              <p class="text-gray-400 text-sm">فيديوهات مكتملة</p>
+              <p id="stat-completed-views" class="text-3xl font-bold">0</p>
+            </div>
           </div>
         </div>
-      `).join('');
-    }
 
-    function showAddCourseModal() {
-      document.getElementById('course-modal-title').textContent = 'إضافة كورس جديد';
-      document.getElementById('course-edit-id').value = '';
-      document.getElementById('course-form').reset();
-      document.getElementById('course-modal').classList.remove('hidden');
-    }
-
-    function editCourse(id) {
-      const course = allData.find(d => d.__backendId === id);
-      if (!course) return;
-      
-      document.getElementById('course-modal-title').textContent = 'تعديل الكورس';
-      document.getElementById('course-edit-id').value = id;
-      document.getElementById('course-title-input').value = course.course_title;
-      document.getElementById('course-grade-input').value = course.course_grade;
-      document.getElementById('course-video-input').value = course.course_video_url;
-      document.getElementById('course-desc-input').value = course.course_description || '';
-      document.getElementById('course-modal').classList.remove('hidden');
-    }
-
-    function closeCourseModal() {
-      document.getElementById('course-modal').classList.add('hidden');
-    }
-
-    async function handleSaveCourse(e) {
-      e.preventDefault();
-      const editId = document.getElementById('course-edit-id').value;
-      const title = document.getElementById('course-title-input').value.trim();
-      const grade = document.getElementById('course-grade-input').value;
-      const video = document.getElementById('course-video-input').value.trim();
-      const desc = document.getElementById('course-desc-input').value.trim();
-
-      showLoading(true);
-      
-      if (editId) {
-        const course = allData.find(d => d.__backendId === editId);
-        await window.dataSdk.update({
-          ...course,
-          course_title: title,
-          course_grade: grade,
-          course_video_url: video,
-          course_description: desc
-        });
-        showToast('تم تحديث الكورس', 'success');
-      } else {
-        await window.dataSdk.create({
-          type: 'course',
-          course_id: Date.now().toString(),
-          course_title: title,
-          course_grade: grade,
-          course_video_url: video,
-          course_description: desc,
-          created_at: new Date().toISOString()
-        });
-        showToast('تم إضافة الكورس', 'success');
-      }
-      
-      showLoading(false);
-      closeCourseModal();
-    }
-
-    // ============ Exam Management ============
-    function loadAdminExams() {
-      const exams = allData.filter(d => d.type === 'exam');
-      const container = document.getElementById('admin-exams-list');
-      const noMsg = document.getElementById('no-admin-exams-msg');
-
-      if (exams.length === 0) {
-        container.innerHTML = '';
-        noMsg.classList.remove('hidden');
-        return;
-      }
-
-      noMsg.classList.add('hidden');
-      container.innerHTML = exams.map(ex => {
-        let qCount = 0;
-        try { qCount = JSON.parse(ex.exam_questions).length; } catch(e) {}
-        return `
-          <div class="card-glass rounded-xl p-6 flex justify-between items-center">
-            <div>
-              <h3 class="text-lg font-bold">${ex.exam_title}</h3>
-              <p class="text-gray-400">${GRADE_NAMES[ex.exam_grade]} - ${qCount} سؤال</p>
-            </div>
-            <div class="flex gap-3">
-              <button onclick="editExam('${ex.__backendId}')" class="px-4 py-2 rounded-lg card-glass hover:bg-white/10 transition">تعديل</button>
-              <button onclick="confirmDelete('${ex.__backendId}', 'exam')" class="px-4 py-2 rounded-lg text-red-400 hover:bg-red-500/20 transition">حذف</button>
-            </div>
+        <!-- Students Section -->
+        <div id="admin-students" class="hidden max-w-6xl">
+          <h1 class="text-3xl font-bold mb-8">👥 الطلاب المسجلين</h1>
+          <div class="card-glass rounded-xl overflow-hidden">
+            <table class="w-full">
+              <thead class="bg-black/30">
+                <tr>
+                  <th class="text-right px-6 py-4">الاسم</th>
+                  <th class="text-right px-6 py-4">الموبايل</th>
+                  <th class="text-right px-6 py-4">الصف</th>
+                  <th class="text-right px-6 py-4">الحالة</th>
+                  <th class="text-right px-6 py-4">إجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="students-table-body">
+                <!-- Students will be loaded here -->
+              </tbody>
+            </table>
           </div>
-        `;
-      }).join('');
-    }
-
-    function showAddExamModal() {
-      document.getElementById('exam-modal-title').textContent = 'إضافة امتحان جديد';
-      document.getElementById('exam-edit-id').value = '';
-      document.getElementById('exam-form').reset();
-      document.getElementById('questions-container').innerHTML = '';
-      questionCount = 0;
-      addQuestionField();
-      document.getElementById('exam-modal').classList.remove('hidden');
-    }
-
-    function editExam(id) {
-      const exam = allData.find(d => d.__backendId === id);
-      if (!exam) return;
-      
-      document.getElementById('exam-modal-title').textContent = 'تعديل الامتحان';
-      document.getElementById('exam-edit-id').value = id;
-      document.getElementById('exam-title-input').value = exam.exam_title;
-      document.getElementById('exam-grade-input').value = exam.exam_grade;
-      
-      let questions = [];
-      try { questions = JSON.parse(exam.exam_questions); } catch(e) {}
-      
-      document.getElementById('questions-container').innerHTML = '';
-      questionCount = 0;
-      questions.forEach(q => addQuestionField(q));
-      
-      document.getElementById('exam-modal').classList.remove('hidden');
-    }
-
-    function closeExamModal() {
-      document.getElementById('exam-modal').classList.add('hidden');
-    }
-
-    function addQuestionField(data = null) {
-      const container = document.getElementById('questions-container');
-      const qIndex = questionCount++;
-      
-      const div = document.createElement('div');
-      div.className = 'card-glass rounded-xl p-4';
-      div.id = `question-${qIndex}`;
-      div.innerHTML = `
-        <div class="flex justify-between items-center mb-4">
-          <h4 class="font-bold">السؤال ${qIndex + 1}</h4>
-          <button type="button" onclick="removeQuestion(${qIndex})" class="text-red-400 hover:text-red-300">&times; حذف</button>
         </div>
-        <input type="text" class="w-full px-4 py-2 rounded-lg input-style text-white mb-3" placeholder="نص السؤال" value="${data?.question || ''}" id="q-text-${qIndex}">
-        <div class="grid grid-cols-2 gap-2 mb-3">
-          <input type="text" class="px-3 py-2 rounded-lg input-style text-white" placeholder="الخيار 1" value="${data?.options?.[0] || ''}" id="q-opt-${qIndex}-0">
-          <input type="text" class="px-3 py-2 rounded-lg input-style text-white" placeholder="الخيار 2" value="${data?.options?.[1] || ''}" id="q-opt-${qIndex}-1">
-          <input type="text" class="px-3 py-2 rounded-lg input-style text-white" placeholder="الخيار 3" value="${data?.options?.[2] || ''}" id="q-opt-${qIndex}-2">
-          <input type="text" class="px-3 py-2 rounded-lg input-style text-white" placeholder="الخيار 4" value="${data?.options?.[3] || ''}" id="q-opt-${qIndex}-3">
+
+        <!-- Requests Section -->
+        <div id="admin-requests" class="hidden max-w-6xl">
+          <h1 class="text-3xl font-bold mb-8">📩 طلبات التسجيل</h1>
+          <div id="requests-list" class="space-y-4">
+            <!-- Requests will be loaded here -->
+          </div>
+          <div id="no-requests-msg" class="hidden text-center py-20 text-gray-400">
+            <div class="text-6xl mb-4">📭</div>
+            <p class="text-xl">لا توجد طلبات جديدة</p>
+          </div>
         </div>
-        <select class="w-full px-4 py-2 rounded-lg input-style text-white bg-transparent" id="q-correct-${qIndex}">
-          <option value="" class="bg-gray-800">اختر الإجابة الصحيحة</option>
-          <option value="0" class="bg-gray-800" ${data?.correct === 0 ? 'selected' : ''}>الخيار 1</option>
-          <option value="1" class="bg-gray-800" ${data?.correct === 1 ? 'selected' : ''}>الخيار 2</option>
-          <option value="2" class="bg-gray-800" ${data?.correct === 2 ? 'selected' : ''}>الخيار 3</option>
-          <option value="3" class="bg-gray-800" ${data?.correct === 3 ? 'selected' : ''}>الخيار 4</option>
-        </select>
-      `;
-      container.appendChild(div);
-    }
 
-    function removeQuestion(index) {
-      const el = document.getElementById(`question-${index}`);
-      if (el) el.remove();
-    }
-
-    async function handleSaveExam(e) {
-      e.preventDefault();
-      const editId = document.getElementById('exam-edit-id').value;
-      const title = document.getElementById('exam-title-input').value.trim();
-      const grade = document.getElementById('exam-grade-input').value;
-
-      const questions = [];
-      document.querySelectorAll('#questions-container > div').forEach(div => {
-        const idx = div.id.split('-')[1];
-        const qText = document.getElementById(`q-text-${idx}`)?.value.trim();
-        const opts = [
-          document.getElementById(`q-opt-${idx}-0`)?.value.trim(),
-          document.getElementById(`q-opt-${idx}-1`)?.value.trim(),
-          document.getElementById(`q-opt-${idx}-2`)?.value.trim(),
-          document.getElementById(`q-opt-${idx}-3`)?.value.trim()
-        ].filter(o => o);
-        const correct = parseInt(document.getElementById(`q-correct-${idx}`)?.value);
-        
-        if (qText && opts.length >= 2 && !isNaN(correct)) {
-          questions.push({ question: qText, options: opts, correct });
-        }
-      });
-
-      if (questions.length === 0) {
-        showToast('أضف سؤال واحد على الأقل', 'error');
-        return;
-      }
-
-      showLoading(true);
-      
-      if (editId) {
-        const exam = allData.find(d => d.__backendId === editId);
-        await window.dataSdk.update({
-          ...exam,
-          exam_title: title,
-          exam_grade: grade,
-          exam_questions: JSON.stringify(questions)
-        });
-        showToast('تم تحديث الامتحان', 'success');
-      } else {
-        await window.dataSdk.create({
-          type: 'exam',
-          exam_id: Date.now().toString(),
-          exam_title: title,
-          exam_grade: grade,
-          exam_questions: JSON.stringify(questions),
-          created_at: new Date().toISOString()
-        });
-        showToast('تم إضافة الامتحان', 'success');
-      }
-      
-      showLoading(false);
-      closeExamModal();
-    }
-
-    // ============ Analytics ============
-    function loadAnalytics() {
-      const views = allData.filter(d => d.type === 'video_view');
-      const results = allData.filter(d => d.type === 'exam_result');
-      
-      const viewsList = document.getElementById('video-views-list');
-      const resultsList = document.getElementById('exam-results-list');
-
-      viewsList.innerHTML = views.map(v => {
-        const student = allData.find(d => d.__backendId === v.video_view_student);
-        const course = allData.find(d => d.__backendId === v.video_view_course);
-        return `
-          <div class="flex justify-between items-center p-3 bg-black/20 rounded-lg">
-            <div>
-              <p class="font-bold">${student?.student_name || 'طالب محذوف'}</p>
-              <p class="text-gray-400 text-sm">${course?.course_title || 'كورس محذوف'}</p>
-            </div>
-            <span class="${v.video_view_completed === 'true' ? 'text-green-400' : 'text-yellow-400'}">
-              ${v.video_view_completed === 'true' ? '✅ مكتمل' : '⏳ جاري'}
-            </span>
+        <!-- Courses Management Section -->
+        <div id="admin-courses" class="hidden max-w-6xl">
+          <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold">📚 إدارة الكورسات</h1>
+            <button onclick="showAddCourseModal()" class="px-6 py-3 rounded-xl btn-primary font-bold flex items-center gap-2">
+              <span>+</span> إضافة كورس
+            </button>
           </div>
-        `;
-      }).join('') || '<p class="text-gray-400 text-center">لا توجد مشاهدات بعد</p>';
-
-      resultsList.innerHTML = results.map(r => {
-        const student = allData.find(d => d.__backendId === r.exam_result_student);
-        const exam = allData.find(d => d.__backendId === r.exam_result_exam);
-        const percentage = Math.round((r.exam_result_score / r.exam_result_total) * 100);
-        return `
-          <div class="flex justify-between items-center p-3 bg-black/20 rounded-lg">
-            <div>
-              <p class="font-bold">${student?.student_name || 'طالب محذوف'}</p>
-              <p class="text-gray-400 text-sm">${exam?.exam_title || 'امتحان محذوف'}</p>
-            </div>
-            <span class="${percentage >= 50 ? 'text-green-400' : 'text-red-400'} font-bold">
-              ${r.exam_result_score}/${r.exam_result_total}
-            </span>
+          <div id="admin-courses-list" class="space-y-4">
+            <!-- Courses will be loaded here -->
           </div>
-        `;
-      }).join('') || '<p class="text-gray-400 text-center">لا توجد نتائج بعد</p>';
-    }
+          <div id="no-admin-courses-msg" class="hidden text-center py-20 text-gray-400">
+            <div class="text-6xl mb-4">📚</div>
+            <p class="text-xl">لم تقم بإضافة أي كورسات بعد</p>
+          </div>
+        </div>
 
-    // ============ Delete Confirmation ============
-    function confirmDelete(id, type) {
-      const messages = {
-        student: 'هل أنت متأكد من حذف هذا الطالب؟',
-        course: 'هل أنت متأكد من حذف هذا الكورس؟',
-        exam: 'هل أنت متأكد من حذف هذا الامتحان؟'
-      };
-      document.getElementById('delete-message').textContent = messages[type];
-      document.getElementById('delete-modal').classList.remove('hidden');
-      
-      document.getElementById('confirm-delete-btn').onclick = async () => {
-        const item = allData.find(d => d.__backendId === id);
-        if (item) {
-          showLoading(true);
-          await window.dataSdk.delete(item);
-          showLoading(false);
-          showToast('تم الحذف بنجاح', 'success');
-        }
-        closeDeleteModal();
-      };
-    }
+        <!-- Exams Management Section -->
+        <div id="admin-exams" class="hidden max-w-6xl">
+          <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold">📝 إدارة الامتحانات</h1>
+            <button onclick="showAddExamModal()" class="px-6 py-3 rounded-xl btn-primary font-bold flex items-center gap-2">
+              <span>+</span> إضافة امتحان
+            </button>
+          </div>
+          <div id="admin-exams-list" class="space-y-4">
+            <!-- Exams will be loaded here -->
+          </div>
+          <div id="no-admin-exams-msg" class="hidden text-center py-20 text-gray-400">
+            <div class="text-6xl mb-4">📝</div>
+            <p class="text-xl">لم تقم بإضافة أي امتحانات بعد</p>
+          </div>
+        </div>
 
-    function closeDeleteModal() {
-      document.getElementById('delete-modal').classList.add('hidden');
-    }
+        <!-- Analytics Section -->
+        <div id="admin-analytics" class="hidden max-w-6xl">
+          <h1 class="text-3xl font-bold mb-8">📈 الإحصائيات التفصيلية</h1>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="card-glass rounded-xl p-6">
+              <h3 class="text-xl font-bold mb-4">👁️ مشاهدات الفيديو</h3>
+              <div id="video-views-list" class="space-y-3 max-h-96 overflow-auto">
+                <!-- Video views will be loaded here -->
+              </div>
+            </div>
+            <div class="card-glass rounded-xl p-6">
+              <h3 class="text-xl font-bold mb-4">📊 نتائج الامتحانات</h3>
+              <div id="exam-results-list" class="space-y-3 max-h-96 overflow-auto">
+                <!-- Exam results will be loaded here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
 
-    // ============ Data Handler ============
-    const dataHandler = {
-      onDataChanged(data) {
-        allData = data;
-        
-        // Update current student if logged in
-        if (currentStudent) {
-          const updated = data.find(d => d.__backendId === currentStudent.__backendId);
-          if (updated) {
-            currentStudent = updated;
-            localStorage.setItem('currentStudent', JSON.stringify(updated));
-          }
-        }
-        
-        // Update admin views if admin is logged in
-        if (isAdmin) {
-          updateAdminStats();
-        }
-      }
-    };
+    <!-- Add Course Modal -->
+    <div id="course-modal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+      <div class="card-glass rounded-2xl p-8 w-full max-w-lg max-h-[90%] overflow-auto">
+        <div class="flex justify-between items-center mb-6">
+          <h2 id="course-modal-title" class="text-2xl font-bold">إضافة كورس جديد</h2>
+          <button onclick="closeCourseModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+        </div>
+        <form id="course-form" onsubmit="handleSaveCourse(event)">
+          <input type="hidden" id="course-edit-id">
+          <div class="mb-4">
+            <label class="block mb-2 text-gray-300">عنوان الكورس</label>
+            <input type="text" id="course-title-input" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="مثال: الجبر - الوحدة الأولى">
+          </div>
+          <div class="mb-4">
+            <label class="block mb-2 text-gray-300">الصف الدراسي</label>
+            <select id="course-grade-input" required class="w-full px-4 py-3 rounded-lg input-style text-white bg-transparent">
+              <option value="" class="bg-gray-800">اختر الصف</option>
+              <option value="prep1" class="bg-gray-800">أولى إعدادي</option>
+              <option value="prep2" class="bg-gray-800">تانية إعدادي</option>
+              <option value="prep3" class="bg-gray-800">تالتة إعدادي</option>
+              <option value="sec1" class="bg-gray-800">أولى ثانوي</option>
+              <option value="sec2" class="bg-gray-800">تانية ثانوي</option>
+              <option value="sec3" class="bg-gray-800">تالتة ثانوي</option>
+            </select>
+          </div>
+          <div class="mb-4">
+            <label class="block mb-2 text-gray-300">رابط الفيديو</label>
+            <input type="url" id="course-video-input" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="https://...">
+          </div>
+          <div class="mb-6">
+            <label class="block mb-2 text-gray-300">وصف الكورس</label>
+            <textarea id="course-desc-input" rows="3" class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="وصف مختصر للكورس..."></textarea>
+          </div>
+          <button type="submit" class="w-full py-4 rounded-xl btn-primary font-bold text-lg">حفظ الكورس</button>
+        </form>
+      </div>
+    </div>
 
-    // ============ Element SDK ============
-    function initElementSdk() {
-      if (window.elementSdk) {
-        window.elementSdk.init({
-          defaultConfig,
-          onConfigChange: async (config) => {
-            document.getElementById('header-title').textContent = config.platform_name || defaultConfig.platform_name;
-            document.getElementById('welcome-text').innerHTML = `مرحباً بك في منصة<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-red-500">${config.platform_name || defaultConfig.platform_name}</span> التعليمية`;
-          },
-          mapToCapabilities: (config) => ({
-            recolorables: [],
-            borderables: [],
-            fontEditable: undefined,
-            fontSizeable: undefined
-          }),
-          mapToEditPanelValues: (config) => new Map([
-            ['platform_name', config.platform_name || defaultConfig.platform_name],
-            ['welcome_message', config.welcome_message || defaultConfig.welcome_message]
-          ])
-        });
-      }
-    }
-
-    // ============ Initialize ============
-    async function init() {
-      initElementSdk();
-      
-      const result = await window.dataSdk.init(dataHandler);
-      if (!result.isOk) {
-        showToast('خطأ في الاتصال بقاعدة البيانات', 'error');
-      }
-
-      // Restore sessions
-      const savedStudent = localStorage.getItem('currentStudent');
-      const savedAdmin = localStorage.getItem('isAdmin');
-      
-      if (savedAdmin === 'true') {
-        isAdmin = true;
-        showPage('admin-dashboard');
-      } else if (savedStudent) {
-        try {
-          const student = JSON.parse(savedStudent);
-          const freshStudent = allData.find(d => d.__backendId === student.__backendId);
-          if (freshStudent && freshStudent.status === 'approved') {
-            currentStudent = freshStudent;
-            document.getElementById('student-welcome').textContent = `مرحباً ${currentStudent.student_name}`;
-            showPage('student-dashboard');
-          } else {
-            localStorage.removeItem('currentStudent');
-          }
-        } catch (e) {
-          localStorage.removeItem('currentStudent');
-        }
-      }
-    }
-
-    init();
-  </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c8ad625a260e1d5',t:'MTc3MDIxNTExNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
-</html>
+    <!-- Add Exam Modal -->
+    <div id="exam-modal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+      <div class="card-glass rounded-2xl p-8 w-full max-w-2xl max-h-[90%] overflow-auto">
+        <div class="flex justify-between items-center mb-6">
+          <h2 id="exam-modal-title" class="text-2xl font-bold">إضافة امتحان جديد</h2>
+          <button onclick="closeExamModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+        </div>
+        <form id="exam-form" onsubmit="handleSaveExam(event)">
+          <input type="hidden" id="exam-edit-id">
+          <div class="mb-4">
+            <label class="block mb-2 text-gray-300">عنوان الامتحان</label>
+          
