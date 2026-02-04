@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html class="light" dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>تسجيل طالب جديد - نور نادي</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;700&amp;family=Noto+Sans+Arabic:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d7ff2",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Noto Sans Arabic", "Lexend", "sans-serif"],
+                        "body": ["Noto Sans Arabic", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#0d141c] dark:text-white font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Header -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e7edf4] dark:border-[#2a3b4c] px-4 md:px-10 py-3 bg-white dark:bg-[#1a2632]">
+<div class="flex items-center gap-4 text-[#0d141c] dark:text-white">
+<div class="size-8 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl">school</span>
+</div>
+<h2 class="text-[#0d141c] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">نور نادي</h2>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#e7edf4] dark:bg-[#2a3b4c] text-[#0d141c] dark:text-white hover:bg-[#d0dbe7] dark:hover:bg-[#354a5f] transition-colors text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="truncate">تسجيل الدخول</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="layout-container flex h-full grow flex-col items-center justify-center py-10 px-4">
+<div class="w-full max-w-[520px] bg-white dark:bg-[#1a2632] rounded-xl shadow-sm border border-[#e7edf4] dark:border-[#2a3b4c] overflow-hidden">
+<!-- Headline -->
+<div class="px-6 pt-8 pb-2 text-center">
+<h1 class="text-[#0d141c] dark:text-white tracking-tight text-[28px] md:text-[32px] font-bold leading-tight">تسجيل طالب جديد</h1>
+<p class="text-[#49739c] dark:text-[#94a3b8] text-base font-normal leading-normal pt-2">انضم إلى منصة نور نادي التعليمية</p>
+</div>
+<!-- Form -->
+<div class="p-6 md:p-8 flex flex-col gap-5">
+<!-- Name Field -->
+<label class="flex flex-col gap-1.5 w-full">
+<span class="text-[#0d141c] dark:text-white text-sm font-medium leading-normal">الاسم الثلاثي</span>
+<div class="relative">
+<input class="form-input flex w-full rounded-lg text-[#0d141c] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-[#cedbe8] dark:border-[#3e5060] bg-slate-50 dark:bg-[#101922] h-12 px-4 text-base font-normal placeholder:text-[#94a3b8] transition-all" placeholder="أدخل اسمك بالكامل" type="text"/>
+<div class="absolute left-3 top-1/2 -translate-y-1/2 text-[#94a3b8]">
+<span class="material-symbols-outlined text-[20px]">person</span>
+</div>
+</div>
+</label>
+<!-- Mobile Field -->
+<label class="flex flex-col gap-1.5 w-full">
+<span class="text-[#0d141c] dark:text-white text-sm font-medium leading-normal">رقم الهاتف (اسم المستخدم)</span>
+<div class="relative">
+<input class="form-input flex w-full rounded-lg text-[#0d141c] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-[#cedbe8] dark:border-[#3e5060] bg-slate-50 dark:bg-[#101922] h-12 px-4 text-base font-normal placeholder:text-[#94a3b8] text-right transition-all" dir="ltr" placeholder="01xxxxxxxxx" type="tel"/>
+<div class="absolute left-3 top-1/2 -translate-y-1/2 text-[#94a3b8]">
+<span class="material-symbols-outlined text-[20px]">smartphone</span>
+</div>
+</div>
+</label>
+<!-- Password Field -->
+<label class="flex flex-col gap-1.5 w-full">
+<span class="text-[#0d141c] dark:text-white text-sm font-medium leading-normal">كلمة المرور</span>
+<div class="relative">
+<input class="form-input flex w-full rounded-lg text-[#0d141c] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-[#cedbe8] dark:border-[#3e5060] bg-slate-50 dark:bg-[#101922] h-12 px-4 text-base font-normal placeholder:text-[#94a3b8] text-right transition-all" dir="ltr" placeholder="••••••••" type="password"/>
+<button class="absolute left-3 top-1/2 -translate-y-1/2 text-[#94a3b8] hover:text-primary transition-colors cursor-pointer" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</label>
+<!-- Academic Year Dropdown -->
+<label class="flex flex-col gap-1.5 w-full">
+<span class="text-[#0d141c] dark:text-white text-sm font-medium leading-normal">السنة الدراسية</span>
+<div class="relative">
+<select class="form-select flex w-full appearance-none rounded-lg text-[#0d141c] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-[#cedbe8] dark:border-[#3e5060] bg-slate-50 dark:bg-[#101922] h-12 px-4 text-base font-normal transition-all cursor-pointer">
+<option disabled="" selected="" value="">اختر المرحلة الدراسية</option>
+<option value="1_prep">أولى إعدادي</option>
+<option value="2_prep">ثانية إعدادي</option>
+<option value="3_prep">ثالثة إعدادي</option>
+<option value="1_sec">أولى ثانوي</option>
+<option value="2_sec">ثانية ثانوي</option>
+<option value="3_sec">ثالثة ثانوي</option>
+</select>
+<div class="absolute left-3 top-1/2 -translate-y-1/2 text-[#94a3b8] pointer-events-none">
+<span class="material-symbols-outlined text-[24px]">arrow_drop_down</span>
+</div>
+</div>
+</label>
+<!-- Info Alert -->
+<div class="flex gap-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/30 p-4 mt-2">
+<div class="text-primary shrink-0">
+<span class="material-symbols-outlined">info</span>
+</div>
+<p class="text-[#0d141c] dark:text-blue-100 text-sm leading-normal">
+<span class="font-bold">تنبيه:</span> تفعيل الحساب يتطلب موافقة الأدمن. سيتم مراجعة بياناتك وتفعيل الحساب من قبل الإدارة قريباً.
+                        </p>
+</div>
+<!-- Submit Button -->
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-4 bg-primary hover:bg-blue-600 text-white text-base font-bold leading-normal tracking-[0.015em] transition-all shadow-md hover:shadow-lg mt-2">
+<span class="truncate">تسجيل حساب جديد</span>
+</button>
+<!-- Login Link -->
+<div class="text-center pt-2">
+<p class="text-[#49739c] dark:text-[#94a3b8] text-sm">
+                            هل لديك حساب بالفعل؟ 
+                            <a class="text-primary font-bold hover:underline" href="#">تسجيل الدخول</a>
+</p>
+</div>
+</div>
+</div>
+<!-- Footer Simple -->
+<div class="mt-8 text-center text-sm text-[#94a3b8]">
+                © 2024 منصة نور نادي التعليمية. جميع الحقوق محفوظة.
+            </div>
+</main>
+</div>
+</body></html>
