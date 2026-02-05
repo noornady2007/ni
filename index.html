@@ -1,511 +1,231 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl" class="h-full">
-<head>
+ <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NOUR NADY - منصة الكورسات</title>
+  <title>NOUR NADY - لوحة تحكم المشرف</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="/_sdk/element_sdk.js"></script>
-  <script src="/_sdk/data_sdk.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&amp;display=swap" rel="stylesheet">
   <style>
-    html { height: 100%; }
-    body { box-sizing: border-box; height: 100%; overflow: auto; }
+    body { box-sizing: border-box; }
     * { font-family: 'Cairo', sans-serif; }
-    .gradient-bg { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
+    .gradient-bg { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); }
     .card-glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
-    .btn-primary { background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%); }
-    .btn-primary:hover { background: linear-gradient(135deg, #ff6b6b 0%, #e94560 100%); }
-    .input-style { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); }
-    .input-style:focus { border-color: #e94560; outline: none; }
-    .sidebar-item:hover, .sidebar-item.active { background: rgba(233,69,96,0.2); border-right: 3px solid #e94560; }
-    .toast { animation: slideIn 0.3s ease; }
-    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-    .loading { animation: pulse 1.5s infinite; }
-    .course-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(233,69,96,0.3); }
-    .course-card { transition: all 0.3s ease; }
+    .btn-primary { background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%); }
+    .btn-secondary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .input-style { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; }
+    .stat-card { background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(0,153,255,0.1)); border: 1px solid rgba(0,212,255,0.3); }
+    .stat-number { color: #00d4ff; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-fade { animation: fadeIn 0.5s ease-out; }
   </style>
-</head>
-<body class="h-full w-full gradient-bg text-white">
-  <div id="app" class="h-full w-full overflow-auto">
-    
-    <!-- Toast Container -->
-    <div id="toast-container" class="fixed top-4 left-4 z-50 flex flex-col gap-2"></div>
+ </head>
+ <body class="h-full gradient-bg text-white overflow-auto">
+  <div id="app" class="min-h-full w-full">
+   <div id="loading-screen" class="fixed inset-0 gradient-bg flex items-center justify-center z-50">
+    <div class="text-center">
+     <div class="w-16 h-16 border-4 border-t-cyan-400 border-r-transparent border-b-cyan-400 border-l-transparent rounded-full animate-spin mx-auto mb-4"></div>
+     <p class="text-xl">جاري التحميل...</p>
+    </div>
+   </div>
 
-    <!-- Loading Overlay -->
-    <div id="loading-overlay" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-      <div class="text-center">
-        <div class="w-16 h-16 border-4 border-e94560 border-t-transparent rounded-full animate-spin mx-auto"></div>
-        <p class="mt-4 text-lg">جاري التحميل...</p>
+   <div id="login-page" class="hidden min-h-full w-full p-4">
+    <div class="max-w-md mx-auto pt-20 animate-fade">
+     <div class="text-center mb-8">
+      <h1 class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-2">NOUR NADY</h1>
+      <p class="text-gray-400">لوحة تحكم المشرف</p>
+     </div>
+     <div class="card-glass rounded-2xl p-8">
+      <form id="admin-login-form" onsubmit="handleAdminLogin(event)">
+       <div class="mb-4"><label class="block mb-2 text-gray-300">البريد الإلكتروني</label> <input type="email" id="admin-email-input" class="w-full p-4 rounded-xl input-style" value="noornady00@gmail.com" required></div>
+       <div class="mb-6"><label class="block mb-2 text-gray-300">كلمة السر</label> <input type="password" id="admin-password-input" class="w-full p-4 rounded-xl input-style" value="noornady2007" required></div>
+       <button type="submit" class="w-full py-4 rounded-xl btn-primary text-white font-bold text-lg">دخول</button>
+       <p id="login-error" class="text-red-400 text-center mt-4 hidden"></p>
+      </form>
+     </div>
+    </div>
+   </div>
+
+   <div id="dashboard" class="hidden min-h-full w-full">
+    <header class="card-glass p-4 sticky top-0 z-40 shadow-lg">
+     <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">لوحة التحكم</h1>
+      <button onclick="logoutAdmin()" class="bg-red-500/20 text-red-400 px-4 py-2 rounded-xl hover:bg-red-500/30 font-bold">خروج</button>
+     </div>
+    </header>
+
+    <nav class="max-w-7xl mx-auto p-4">
+     <div class="flex gap-2 flex-wrap">
+      <button onclick="showAdminSection('overview')" class="admin-nav-btn px-6 py-3 rounded-xl btn-primary text-white font-bold" data-section="overview">📊 نظرة عامة</button>
+      <button onclick="showAdminSection('courses')" class="admin-nav-btn px-6 py-3 rounded-xl card-glass text-gray-300 font-bold" data-section="courses">📚 الكورسات</button>
+      <button onclick="showAdminSection('exams')" class="admin-nav-btn px-6 py-3 rounded-xl card-glass text-gray-300 font-bold" data-section="exams">📝 الامتحانات</button>
+      <button onclick="showAdminSection('students')" class="admin-nav-btn px-6 py-3 rounded-xl card-glass text-gray-300 font-bold" data-section="students">👥 الطلاب</button>
+     </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto p-4">
+     <section id="overview-section" class="section animate-fade">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+       <div class="stat-card rounded-xl p-6 text-center"><p class="text-gray-400 mb-2">إجمالي الطلاب</p><p class="stat-number text-4xl font-black" id="total-students">0</p></div>
+       <div class="stat-card rounded-xl p-6 text-center"><p class="text-gray-400 mb-2">الكورسات</p><p class="stat-number text-4xl font-black" id="total-courses">0</p></div>
+       <div class="stat-card rounded-xl p-6 text-center"><p class="text-gray-400 mb-2">الامتحانات</p><p class="stat-number text-4xl font-black" id="total-exams">0</p></div>
       </div>
+     </section>
+
+     <section id="courses-section" class="section hidden animate-fade">
+      <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold">📚 إدارة الكورسات</h2><button onclick="openModal('add-course-modal')" class="btn-secondary px-6 py-3 rounded-xl text-white font-bold">+ إضافة كورس جديد</button></div>
+      <div id="courses-list" class="space-y-4"></div>
+     </section>
+
+     <section id="exams-section" class="section hidden animate-fade">
+      <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold">📝 إدارة الامتحانات</h2><button onclick="openModal('add-exam-modal')" class="btn-secondary px-6 py-3 rounded-xl text-white font-bold">+ إضافة امتحان جديد</button></div>
+      <div id="exams-list" class="space-y-4"></div>
+     </section>
+
+     <section id="students-section" class="section hidden animate-fade">
+      <h2 class="text-2xl font-bold mb-6">👥 طلبات الطلاب الجدد</h2>
+      <div id="pending-students-list" class="space-y-3"></div>
+      <h2 class="text-2xl font-bold my-6 text-green-400">✅ الطلاب المعتمدين</h2>
+      <div id="approved-students-list" class="space-y-3"></div>
+     </section>
+    </main>
+   </div>
+
+   <div id="add-course-modal" class="hidden fixed inset-0 bg-black/90 z-50 overflow-auto p-4">
+    <div class="max-w-2xl mx-auto my-8 card-glass rounded-2xl p-6">
+      <div class="flex justify-between items-center mb-6"><h3 class="text-2xl font-bold">إضافة كورس جديد</h3><button onclick="closeModal('add-course-modal')" class="text-white text-3xl">×</button></div>
+      <form onsubmit="handleAddCourse(event)">
+       <div class="mb-4"><label class="block mb-2">اسم الكورس</label><input type="text" id="course-name" class="w-full p-3 rounded-lg input-style" required></div>
+       <div class="mb-4"><label class="block mb-2">الصف الدراسي</label>
+        <select id="course-grade" class="w-full p-3 rounded-lg input-style" required>
+         <option value="prep1">أولى إعدادي</option><option value="prep2">تانية إعدادي</option><option value="prep3">تالتة إعدادي</option>
+         <option value="sec1">أولى ثانوي</option><option value="sec2">تانية ثانوي</option><option value="sec3">تالتة ثانوي</option>
+        </select>
+       </div>
+       <div class="mb-6"><label class="block mb-2">رابط الفيديو (YouTube)</label><input type="url" id="course-url" class="w-full p-3 rounded-lg input-style" required></div>
+       <button type="submit" class="w-full py-3 rounded-lg btn-primary text-white font-bold">حفظ الكورس</button>
+      </form>
     </div>
+   </div>
 
-    <!-- Main Student Page -->
-    <div id="page-main" class="min-h-full">
-      <!-- Header -->
-      <header class="bg-black/30 py-4 px-6 flex justify-between items-center sticky top-0 z-40">
-        <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-full btn-primary flex items-center justify-center text-2xl font-bold">N</div>
-          <div>
-            <h1 id="header-title" class="text-2xl font-bold">NOUR NADY</h1>
-            <p class="text-xs text-gray-400">منصة تعليمية متكاملة</p>
-          </div>
-        </div>
-        <div class="flex gap-3">
-          <button onclick="showPage('login')" class="px-4 py-2 rounded-lg card-glass hover:bg-white/10 transition">تسجيل الدخول</button>
-          <button onclick="showPage('register')" class="px-4 py-2 rounded-lg btn-primary transition">إنشاء حساب</button>
-          <button onclick="showPage('admin-login')" class="px-3 py-2 rounded-lg text-gray-400 hover:text-white transition text-sm">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-          </button>
-        </div>
-      </header>
-
-      <!-- Hero Section -->
-      <section class="py-20 px-6 text-center">
-        <h2 id="welcome-text" class="text-4xl md:text-6xl font-bold mb-6">مرحباً بك في منصة<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-red-500">نور نادي</span> التعليمية</h2>
-        <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">منصة تعليمية متكاملة للمرحلة الإعدادية والثانوية - كورسات احترافية وامتحانات تفاعلية</p>
-        <button onclick="showPage('register')" class="px-8 py-4 rounded-xl btn-primary text-xl font-bold hover:scale-105 transition transform">ابدأ رحلة التعلم الآن 🚀</button>
-      </section>
-
-      <!-- Grades Section -->
-      <section class="py-12 px-6">
-        <h3 class="text-3xl font-bold text-center mb-10">اختر صفك الدراسي</h3>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-6xl mx-auto">
-          <div class="card-glass rounded-xl p-6 text-center cursor-pointer hover:bg-white/10 transition" onclick="showPage('register')">
-            <div class="text-4xl mb-3">📚</div>
-            <p class="font-bold">أولى إعدادي</p>
-          </div>
-          <div class="card-glass rounded-xl p-6 text-center cursor-pointer hover:bg-white/10 transition" onclick="showPage('register')">
-            <div class="text-4xl mb-3">📖</div>
-            <p class="font-bold">تانية إعدادي</p>
-          </div>
-          <div class="card-glass rounded-xl p-6 text-center cursor-pointer hover:bg-white/10 transition" onclick="showPage('register')">
-            <div class="text-4xl mb-3">📝</div>
-            <p class="font-bold">تالتة إعدادي</p>
-          </div>
-          <div class="card-glass rounded-xl p-6 text-center cursor-pointer hover:bg-white/10 transition" onclick="showPage('register')">
-            <div class="text-4xl mb-3">🎓</div>
-            <p class="font-bold">أولى ثانوي</p>
-          </div>
-          <div class="card-glass rounded-xl p-6 text-center cursor-pointer hover:bg-white/10 transition" onclick="showPage('register')">
-            <div class="text-4xl mb-3">🏆</div>
-            <p class="font-bold">تانية ثانوي</p>
-          </div>
-          <div class="card-glass rounded-xl p-6 text-center cursor-pointer hover:bg-white/10 transition" onclick="showPage('register')">
-            <div class="text-4xl mb-3">⭐</div>
-            <p class="font-bold">تالتة ثانوي</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Footer -->
-      <footer class="py-8 px-6 bg-black/30 text-center mt-20">
-        <p class="text-gray-400">© 2024 NOUR NADY - جميع الحقوق محفوظة</p>
-      </footer>
+   <div id="add-exam-modal" class="hidden fixed inset-0 bg-black/90 z-50 overflow-auto p-4">
+    <div class="max-w-2xl mx-auto my-8 card-glass rounded-2xl p-6">
+      <div class="flex justify-between items-center mb-6"><h3 class="text-2xl font-bold">إضافة امتحان</h3><button onclick="closeModal('add-exam-modal')" class="text-white text-3xl">×</button></div>
+      <form onsubmit="handleAddExam(event)">
+       <div class="mb-4"><label class="block mb-2">اسم الامتحان</label><input type="text" id="exam-name" class="w-full p-3 rounded-lg input-style" required></div>
+       <div class="mb-4"><label class="block mb-2">الصف الدراسي</label>
+        <select id="exam-grade" class="w-full p-3 rounded-lg input-style" required>
+         <option value="prep1">أولى إعدادي</option><option value="prep2">تانية إعدادي</option><option value="prep3">تالتة إعدادي</option>
+        </select>
+       </div>
+       <button type="submit" class="w-full py-3 rounded-lg btn-primary text-white font-bold">إنشاء الامتحان</button>
+      </form>
     </div>
+   </div>
+  </div>
 
-    <!-- Student Login Page -->
-    <div id="page-login" class="hidden min-h-full flex items-center justify-center p-6">
-      <div class="card-glass rounded-2xl p-8 w-full max-w-md">
-        <button onclick="showPage('main')" class="text-gray-400 hover:text-white mb-4">→ رجوع</button>
-        <h2 class="text-3xl font-bold text-center mb-8">تسجيل الدخول</h2>
-        <form id="login-form" onsubmit="handleStudentLogin(event)">
-          <div class="mb-4">
-            <label class="block mb-2 text-gray-300">رقم الموبايل</label>
-            <input type="tel" id="login-phone" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="01xxxxxxxxx">
-          </div>
-          <div class="mb-6">
-            <label class="block mb-2 text-gray-300">كلمة السر</label>
-            <input type="password" id="login-password" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="••••••••">
-          </div>
-          <button type="submit" class="w-full py-4 rounded-xl btn-primary font-bold text-lg">دخول</button>
-        </form>
-        <p class="text-center mt-4 text-gray-400">ليس لديك حساب؟ <button onclick="showPage('register')" class="text-pink-500 hover:underline">سجل الآن</button></p>
-      </div>
-    </div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    <!-- Student Register Page -->
-    <div id="page-register" class="hidden min-h-full flex items-center justify-center p-6">
-      <div class="card-glass rounded-2xl p-8 w-full max-w-md">
-        <button onclick="showPage('main')" class="text-gray-400 hover:text-white mb-4">→ رجوع</button>
-        <h2 class="text-3xl font-bold text-center mb-8">إنشاء حساب جديد</h2>
-        <form id="register-form" onsubmit="handleStudentRegister(event)">
-          <div class="mb-4">
-            <label class="block mb-2 text-gray-300">الاسم بالكامل</label>
-            <input type="text" id="reg-name" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="محمد أحمد">
-          </div>
-          <div class="mb-4">
-            <label class="block mb-2 text-gray-300">رقم الموبايل</label>
-            <input type="tel" id="reg-phone" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="01xxxxxxxxx">
-          </div>
-          <div class="mb-4">
-            <label class="block mb-2 text-gray-300">كلمة السر</label>
-            <input type="password" id="reg-password" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="••••••••">
-          </div>
-          <div class="mb-6">
-            <label class="block mb-2 text-gray-300">الصف الدراسي</label>
-            <select id="reg-grade" required class="w-full px-4 py-3 rounded-lg input-style text-white bg-transparent">
-              <option value="" class="bg-gray-800">اختر صفك</option>
-              <option value="prep1" class="bg-gray-800">أولى إعدادي</option>
-              <option value="prep2" class="bg-gray-800">تانية إعدادي</option>
-              <option value="prep3" class="bg-gray-800">تالتة إعدادي</option>
-              <option value="sec1" class="bg-gray-800">أولى ثانوي</option>
-              <option value="sec2" class="bg-gray-800">تانية ثانوي</option>
-              <option value="sec3" class="bg-gray-800">تالتة ثانوي</option>
-            </select>
-          </div>
-          <button type="submit" id="register-btn" class="w-full py-4 rounded-xl btn-primary font-bold text-lg">إنشاء الحساب</button>
-        </form>
-        <p class="text-center mt-4 text-gray-400">لديك حساب؟ <button onclick="showPage('login')" class="text-pink-500 hover:underline">سجل دخول</button></p>
-      </div>
-    </div>
+    const firebaseConfig = {
+      apiKey: "AIzaSyC9xegXKAHeaDsbh0EERWnWqJI4iaxvJW8",
+      authDomain: "noornady.firebaseapp.com",
+      projectId: "noornady",
+      storageBucket: "noornady.firebasestorage.app",
+      messagingSenderId: "426364363200",
+      appId: "1:426364363200:web:2783bf7fca67a579e86825"
+    };
 
-    <!-- Pending Approval Page -->
-    <div id="page-pending" class="hidden min-h-full flex items-center justify-center p-6">
-      <div class="card-glass rounded-2xl p-8 w-full max-w-md text-center">
-        <div class="text-6xl mb-6">⏳</div>
-        <h2 class="text-3xl font-bold mb-4">في انتظار الموافقة</h2>
-        <p class="text-gray-300 mb-2">تم إرسال طلب التسجيل للمشرف.</p>
-        <p class="text-gray-400 text-sm mb-6">ستظهر لديك رسالة "تم قبول حسابك" عند موافقة المشرف</p>
-        <button onclick="showPage('main')" class="px-6 py-3 rounded-xl btn-primary font-bold">العودة للرئيسية</button>
-      </div>
-    </div>
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    let allData = [];
 
-    <!-- Student Dashboard -->
-    <div id="page-student-dashboard" class="hidden min-h-full">
-      <header class="bg-black/30 py-4 px-6 flex justify-between items-center sticky top-0 z-40">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full btn-primary flex items-center justify-center font-bold">N</div>
-          <div>
-            <h1 class="text-xl font-bold">NOUR NADY</h1>
-            <p id="student-welcome" class="text-xs text-gray-400">مرحباً</p>
-          </div>
+    // Sync Data
+    onSnapshot(collection(db, "platform_data"), (snapshot) => {
+      allData = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+      updateUI();
+      document.getElementById('loading-screen').classList.add('hidden');
+    });
+
+    window.handleAdminLogin = (e) => {
+      e.preventDefault();
+      const email = document.getElementById('admin-email-input').value;
+      const pass = document.getElementById('admin-password-input').value;
+      if(email === "noornady00@gmail.com" && pass === "noornady2007") {
+        document.getElementById('login-page').classList.add('hidden');
+        document.getElementById('dashboard').classList.remove('hidden');
+      } else { alert("بيانات خاطئة"); }
+    };
+
+    window.showAdminSection = (id) => {
+      document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+      document.getElementById(id + '-section').classList.remove('hidden');
+    };
+
+    function updateUI() {
+      const students = allData.filter(d => d.type === 'student');
+      const courses = allData.filter(d => d.type === 'course');
+      const exams = allData.filter(d => d.type === 'exam');
+
+      document.getElementById('total-students').textContent = students.length;
+      document.getElementById('total-courses').textContent = courses.length;
+      document.getElementById('total-exams').textContent = exams.length;
+
+      // Render Pending Students
+      document.getElementById('pending-students-list').innerHTML = students.filter(s => s.status === 'pending').map(s => `
+        <div class="p-4 card-glass rounded-xl flex justify-between items-center">
+          <div><p class="font-bold">${s.name}</p><p class="text-sm text-gray-400">${s.phone} | ${s.grade}</p></div>
+          <button onclick="approveStudent('${s.id}')" class="bg-green-500 px-4 py-2 rounded-lg text-sm">اعتماد</button>
         </div>
-        <div class="flex gap-3">
-          <button onclick="showStudentSection('courses')" class="px-4 py-2 rounded-lg hover:bg-white/10 transition">الكورسات</button>
-          <button onclick="showStudentSection('exams')" class="px-4 py-2 rounded-lg hover:bg-white/10 transition">الامتحانات</button>
-          <button onclick="showStudentSection('results')" class="px-4 py-2 rounded-lg hover:bg-white/10 transition">نتائجي</button>
-          <button onclick="logoutStudent()" class="px-4 py-2 rounded-lg text-red-400 hover:bg-red-500/20 transition">خروج</button>
-        </div>
-      </header>
+      `).join('') || '<p class="text-center text-gray-500">لا يوجد طلبات</p>';
 
-      <div class="p-6">
-        <!-- Student Courses Section -->
-        <div id="student-courses" class="max-w-6xl mx-auto">
-          <h2 class="text-3xl font-bold mb-6">📚 كورساتك</h2>
-          <div id="student-courses-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Courses will be loaded here -->
-          </div>
-          <div id="no-courses-msg" class="hidden text-center py-20 text-gray-400">
-            <div class="text-6xl mb-4">📭</div>
-            <p class="text-xl">لا توجد كورسات متاحة لصفك حالياً</p>
-          </div>
-        </div>
+      // Render Approved Students
+      document.getElementById('approved-students-list').innerHTML = students.filter(s => s.status === 'approved').map(s => `
+        <div class="p-3 card-glass rounded-xl text-sm border-r-4 border-green-500">${s.name} - ${s.phone}</div>
+      `).join('');
 
-        <!-- Student Exams Section -->
-        <div id="student-exams" class="hidden max-w-6xl mx-auto">
-          <h2 class="text-3xl font-bold mb-6">📝 الامتحانات</h2>
-          <div id="student-exams-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Exams will be loaded here -->
-          </div>
-          <div id="no-exams-msg" class="hidden text-center py-20 text-gray-400">
-            <div class="text-6xl mb-4">📭</div>
-            <p class="text-xl">لا توجد امتحانات متاحة لصفك حالياً</p>
-          </div>
+      // Render Courses
+      document.getElementById('courses-list').innerHTML = courses.map(c => `
+        <div class="p-4 card-glass rounded-xl flex justify-between">
+          <span>${c.name} (${c.grade})</span>
+          <button onclick="deleteDocById('${c.id}')" class="text-red-400">حذف</button>
         </div>
+      `).join('');
+    }
 
-        <!-- Student Results Section -->
-        <div id="student-results" class="hidden max-w-4xl mx-auto">
-          <h2 class="text-3xl font-bold mb-6">🏆 نتائجي</h2>
-          <div id="student-results-list" class="space-y-4">
-            <!-- Results will be loaded here -->
-          </div>
-          <div id="no-results-msg" class="hidden text-center py-20 text-gray-400">
-            <div class="text-6xl mb-4">📊</div>
-            <p class="text-xl">لم تقم بأداء أي امتحانات بعد</p>
-          </div>
-        </div>
-      </div>
-    </div>
+    window.approveStudent = async (id) => { await updateDoc(doc(db, "platform_data", id), { status: 'approved' }); };
+    window.deleteDocById = async (id) => { await deleteDoc(doc(db, "platform_data", id)); };
 
-    <!-- Video Player Page -->
-    <div id="page-video" class="hidden min-h-full">
-      <header class="bg-black/30 py-4 px-6 flex justify-between items-center">
-        <button onclick="showPage('student-dashboard')" class="flex items-center gap-2 text-gray-300 hover:text-white">
-          <span>→</span> رجوع للكورسات
-        </button>
-        <h1 id="video-title" class="text-xl font-bold">عنوان الفيديو</h1>
-      </header>
-      <div class="p-6 max-w-5xl mx-auto">
-        <div class="card-glass rounded-2xl overflow-hidden">
-          <div class="aspect-video bg-black flex items-center justify-center">
-            <video id="video-player" class="w-full h-full" controls onended="handleVideoEnded()" ontimeupdate="handleVideoProgress()">
-              <source id="video-source" src="" type="video/mp4">
-            </video>
-          </div>
-          <div class="p-6">
-            <h2 id="video-desc-title" class="text-2xl font-bold mb-4"></h2>
-            <p id="video-description" class="text-gray-300"></p>
-          </div>
-        </div>
-      </div>
-    </div>
+    window.handleAddCourse = async (e) => {
+      e.preventDefault();
+      await addDoc(collection(db, "platform_data"), {
+        type: 'course',
+        name: document.getElementById('course-name').value,
+        grade: document.getElementById('course-grade').value,
+        url: document.getElementById('course-url').value,
+        createdAt: Date.now()
+      });
+      closeModal('add-course-modal');
+    };
 
-    <!-- Exam Page -->
-    <div id="page-exam" class="hidden min-h-full">
-      <header class="bg-black/30 py-4 px-6 flex justify-between items-center">
-        <button onclick="showPage('student-dashboard'); showStudentSection('exams')" class="flex items-center gap-2 text-gray-300 hover:text-white">
-          <span>→</span> رجوع للامتحانات
-        </button>
-        <h1 id="exam-page-title" class="text-xl font-bold">الامتحان</h1>
-      </header>
-      <div class="p-6 max-w-3xl mx-auto">
-        <div id="exam-questions-container" class="space-y-6">
-          <!-- Questions will be loaded here -->
-        </div>
-        <button id="submit-exam-btn" onclick="submitExam()" class="w-full mt-8 py-4 rounded-xl btn-primary font-bold text-lg">تسليم الامتحان</button>
-      </div>
-    </div>
+    window.handleAddExam = async (e) => {
+      e.preventDefault();
+      await addDoc(collection(db, "platform_data"), {
+        type: 'exam',
+        name: document.getElementById('exam-name').value,
+        grade: document.getElementById('exam-grade').value,
+        questions: [], // مبدئياً
+        createdAt: Date.now()
+      });
+      closeModal('add-exam-modal');
+    };
 
-    <!-- Exam Result Page -->
-    <div id="page-exam-result" class="hidden min-h-full flex items-center justify-center p-6">
-      <div class="card-glass rounded-2xl p-8 w-full max-w-2xl">
-        <div class="text-center mb-8">
-          <div id="result-emoji" class="text-8xl mb-4">🎉</div>
-          <h2 class="text-3xl font-bold mb-2">نتيجة الامتحان</h2>
-          <p id="result-score" class="text-5xl font-bold text-pink-500"></p>
-        </div>
-        <div id="result-details" class="space-y-4 mb-8">
-          <!-- Detailed results will be shown here -->
-        </div>
-        <button onclick="showPage('student-dashboard'); showStudentSection('results')" class="w-full py-4 rounded-xl btn-primary font-bold text-lg">عرض جميع نتائجي</button>
-      </div>
-    </div>
+    window.openModal = (id) => document.getElementById(id).classList.remove('hidden');
+    window.closeModal = (id) => document.getElementById(id).classList.add('hidden');
+    window.logoutAdmin = () => location.reload();
 
-    <!-- Admin Login Page -->
-    <div id="page-admin-login" class="hidden min-h-full flex items-center justify-center p-6">
-      <div class="card-glass rounded-2xl p-8 w-full max-w-md">
-        <button onclick="showPage('main')" class="text-gray-400 hover:text-white mb-4">→ رجوع</button>
-        <div class="text-center mb-8">
-          <div class="w-20 h-20 rounded-full btn-primary flex items-center justify-center text-4xl font-bold mx-auto mb-4">👨‍💼</div>
-          <h2 class="text-3xl font-bold">لوحة المشرف</h2>
-        </div>
-        <form id="admin-login-form" onsubmit="handleAdminLogin(event)">
-          <div class="mb-4">
-            <label class="block mb-2 text-gray-300">البريد الإلكتروني</label>
-            <input type="email" id="admin-email" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="admin@example.com">
-          </div>
-          <div class="mb-6">
-            <label class="block mb-2 text-gray-300">كلمة السر</label>
-            <input type="password" id="admin-password" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="••••••••">
-          </div>
-          <button type="submit" class="w-full py-4 rounded-xl btn-primary font-bold text-lg">دخول لوحة التحكم</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Admin Dashboard -->
-    <div id="page-admin-dashboard" class="hidden min-h-full flex">
-      <!-- Sidebar -->
-      <aside class="w-64 bg-black/40 min-h-full p-4">
-        <div class="flex items-center gap-3 mb-8 p-4">
-          <div class="w-12 h-12 rounded-full btn-primary flex items-center justify-center text-xl font-bold">👨‍💼</div>
-          <div>
-            <h2 class="font-bold">المشرف</h2>
-            <p class="text-xs text-gray-400">NOUR NADY</p>
-          </div>
-        </div>
-        <nav class="space-y-2">
-          <button onclick="showAdminSection('overview')" class="sidebar-item active w-full text-right px-4 py-3 rounded-lg transition flex items-center gap-3">
-            <span>📊</span> نظرة عامة
-          </button>
-          <button onclick="showAdminSection('students')" class="sidebar-item w-full text-right px-4 py-3 rounded-lg transition flex items-center gap-3">
-            <span>👥</span> الطلاب
-          </button>
-          <button onclick="showAdminSection('requests')" class="sidebar-item w-full text-right px-4 py-3 rounded-lg transition flex items-center gap-3">
-            <span>📩</span> طلبات التسجيل
-            <span id="requests-badge" class="bg-red-500 text-white text-xs px-2 py-1 rounded-full hidden">0</span>
-          </button>
-          <button onclick="showAdminSection('courses')" class="sidebar-item w-full text-right px-4 py-3 rounded-lg transition flex items-center gap-3">
-            <span>📚</span> الكورسات
-          </button>
-          <button onclick="showAdminSection('exams')" class="sidebar-item w-full text-right px-4 py-3 rounded-lg transition flex items-center gap-3">
-            <span>📝</span> الامتحانات
-          </button>
-          <button onclick="showAdminSection('analytics')" class="sidebar-item w-full text-right px-4 py-3 rounded-lg transition flex items-center gap-3">
-            <span>📈</span> الإحصائيات
-          </button>
-        </nav>
-        <button onclick="logoutAdmin()" class="w-full mt-8 px-4 py-3 rounded-lg text-red-400 hover:bg-red-500/20 transition flex items-center gap-3">
-          <span>🚪</span> تسجيل الخروج
-        </button>
-      </aside>
-
-      <!-- Main Content -->
-      <main class="flex-1 p-6 overflow-auto">
-        <!-- Overview Section -->
-        <div id="admin-overview" class="max-w-6xl">
-          <h1 class="text-3xl font-bold mb-8">📊 نظرة عامة</h1>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="card-glass rounded-xl p-6">
-              <div class="text-4xl mb-2">👥</div>
-              <p class="text-gray-400 text-sm">إجمالي الطلاب</p>
-              <p id="stat-total-students" class="text-3xl font-bold">0</p>
-            </div>
-            <div class="card-glass rounded-xl p-6">
-              <div class="text-4xl mb-2">📚</div>
-              <p class="text-gray-400 text-sm">الكورسات</p>
-              <p id="stat-total-courses" class="text-3xl font-bold">0</p>
-            </div>
-            <div class="card-glass rounded-xl p-6">
-              <div class="text-4xl mb-2">👁️</div>
-              <p class="text-gray-400 text-sm">مشاهدات الفيديو</p>
-              <p id="stat-total-views" class="text-3xl font-bold">0</p>
-            </div>
-            <div class="card-glass rounded-xl p-6">
-              <div class="text-4xl mb-2">✅</div>
-              <p class="text-gray-400 text-sm">فيديوهات مكتملة</p>
-              <p id="stat-completed-views" class="text-3xl font-bold">0</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Students Section -->
-        <div id="admin-students" class="hidden max-w-6xl">
-          <h1 class="text-3xl font-bold mb-8">👥 الطلاب المسجلين</h1>
-          <div class="card-glass rounded-xl overflow-hidden">
-            <table class="w-full">
-              <thead class="bg-black/30">
-                <tr>
-                  <th class="text-right px-6 py-4">الاسم</th>
-                  <th class="text-right px-6 py-4">الموبايل</th>
-                  <th class="text-right px-6 py-4">الصف</th>
-                  <th class="text-right px-6 py-4">الحالة</th>
-                  <th class="text-right px-6 py-4">إجراءات</th>
-                </tr>
-              </thead>
-              <tbody id="students-table-body">
-                <!-- Students will be loaded here -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Requests Section -->
-        <div id="admin-requests" class="hidden max-w-6xl">
-          <h1 class="text-3xl font-bold mb-8">📩 طلبات التسجيل</h1>
-          <div id="requests-list" class="space-y-4">
-            <!-- Requests will be loaded here -->
-          </div>
-          <div id="no-requests-msg" class="hidden text-center py-20 text-gray-400">
-            <div class="text-6xl mb-4">📭</div>
-            <p class="text-xl">لا توجد طلبات جديدة</p>
-          </div>
-        </div>
-
-        <!-- Courses Management Section -->
-        <div id="admin-courses" class="hidden max-w-6xl">
-          <div class="flex justify-between items-center mb-8">
-            <h1 class="text-3xl font-bold">📚 إدارة الكورسات</h1>
-            <button onclick="showAddCourseModal()" class="px-6 py-3 rounded-xl btn-primary font-bold flex items-center gap-2">
-              <span>+</span> إضافة كورس
-            </button>
-          </div>
-          <div id="admin-courses-list" class="space-y-4">
-            <!-- Courses will be loaded here -->
-          </div>
-          <div id="no-admin-courses-msg" class="hidden text-center py-20 text-gray-400">
-            <div class="text-6xl mb-4">📚</div>
-            <p class="text-xl">لم تقم بإضافة أي كورسات بعد</p>
-          </div>
-        </div>
-
-        <!-- Exams Management Section -->
-        <div id="admin-exams" class="hidden max-w-6xl">
-          <div class="flex justify-between items-center mb-8">
-            <h1 class="text-3xl font-bold">📝 إدارة الامتحانات</h1>
-            <button onclick="showAddExamModal()" class="px-6 py-3 rounded-xl btn-primary font-bold flex items-center gap-2">
-              <span>+</span> إضافة امتحان
-            </button>
-          </div>
-          <div id="admin-exams-list" class="space-y-4">
-            <!-- Exams will be loaded here -->
-          </div>
-          <div id="no-admin-exams-msg" class="hidden text-center py-20 text-gray-400">
-            <div class="text-6xl mb-4">📝</div>
-            <p class="text-xl">لم تقم بإضافة أي امتحانات بعد</p>
-          </div>
-        </div>
-
-        <!-- Analytics Section -->
-        <div id="admin-analytics" class="hidden max-w-6xl">
-          <h1 class="text-3xl font-bold mb-8">📈 الإحصائيات التفصيلية</h1>
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="card-glass rounded-xl p-6">
-              <h3 class="text-xl font-bold mb-4">👁️ مشاهدات الفيديو</h3>
-              <div id="video-views-list" class="space-y-3 max-h-96 overflow-auto">
-                <!-- Video views will be loaded here -->
-              </div>
-            </div>
-            <div class="card-glass rounded-xl p-6">
-              <h3 class="text-xl font-bold mb-4">📊 نتائج الامتحانات</h3>
-              <div id="exam-results-list" class="space-y-3 max-h-96 overflow-auto">
-                <!-- Exam results will be loaded here -->
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
-
-    <!-- Add Course Modal -->
-    <div id="course-modal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-      <div class="card-glass rounded-2xl p-8 w-full max-w-lg max-h-[90%] overflow-auto">
-        <div class="flex justify-between items-center mb-6">
-          <h2 id="course-modal-title" class="text-2xl font-bold">إضافة كورس جديد</h2>
-          <button onclick="closeCourseModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
-        </div>
-        <form id="course-form" onsubmit="handleSaveCourse(event)">
-          <input type="hidden" id="course-edit-id">
-          <div class="mb-4">
-            <label class="block mb-2 text-gray-300">عنوان الكورس</label>
-            <input type="text" id="course-title-input" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="مثال: الجبر - الوحدة الأولى">
-          </div>
-          <div class="mb-4">
-            <label class="block mb-2 text-gray-300">الصف الدراسي</label>
-            <select id="course-grade-input" required class="w-full px-4 py-3 rounded-lg input-style text-white bg-transparent">
-              <option value="" class="bg-gray-800">اختر الصف</option>
-              <option value="prep1" class="bg-gray-800">أولى إعدادي</option>
-              <option value="prep2" class="bg-gray-800">تانية إعدادي</option>
-              <option value="prep3" class="bg-gray-800">تالتة إعدادي</option>
-              <option value="sec1" class="bg-gray-800">أولى ثانوي</option>
-              <option value="sec2" class="bg-gray-800">تانية ثانوي</option>
-              <option value="sec3" class="bg-gray-800">تالتة ثانوي</option>
-            </select>
-          </div>
-          <div class="mb-4">
-            <label class="block mb-2 text-gray-300">رابط الفيديو</label>
-            <input type="url" id="course-video-input" required class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="https://...">
-          </div>
-          <div class="mb-6">
-            <label class="block mb-2 text-gray-300">وصف الكورس</label>
-            <textarea id="course-desc-input" rows="3" class="w-full px-4 py-3 rounded-lg input-style text-white" placeholder="وصف مختصر للكورس..."></textarea>
-          </div>
-          <button type="submit" class="w-full py-4 rounded-xl btn-primary font-bold text-lg">حفظ الكورس</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Add Exam Modal -->
-    <div id="exam-modal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-      <div class="card-glass rounded-2xl p-8 w-full max-w-2xl max-h-[90%] overflow-auto">
-        <div class="flex justify-between items-center mb-6">
-          <h2 id="exam-modal-title" class="text-2xl font-bold">إضافة امتحان جديد</h2>
-          <button onclick="closeExamModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
-        </div>
-        <form id="exam-form" onsubmit="handleSaveExam(event)">
-          <input type="hidden" id="exam-edit-id">
-          <div class="mb-4">
-            <label class="block mb-2 text-gray-300">عنوان الامتحان</label>
-          
+    document.getElementById('login-page').classList.remove('hidden');
+  </script>
+ </body>
+</html>
